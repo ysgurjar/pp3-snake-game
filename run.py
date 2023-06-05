@@ -1,2 +1,1 @@
-a=input("Enter text: \n ")
-print(a)
+prin("Hello world!")
