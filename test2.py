@@ -1,75 +1,102 @@
-class Board:
-    
-    grid_points={}
-       
-    def draw_snake(window,head_coordinates):
-        """Draws a snake at given coordinates on the board"""
-        pass
+import time
 
-    def draw_food(window,food_coordinates):
+
+class Board:
+
+    grid_points = {}
+
+    def draw_snake(self,window, coordinates):
+        """Draws a snake at given coordinates on the board"""
+        window.addstr(*coordinates[0], '@')
+        for segment in coordinates[1:]:
+            window.addstr(*segment, '*')
+        
+        d.curses.curs_set(0)
+        window.refresh()
+        time.sleep(4)
+    def draw_food(window, food_coordinates):
         """Draws a food element at given coordinates on grid"""
 
+
 class BoardElement:
-    def __init__(self,coordinates):
-        self.coordinates=coordinates
+    def __init__(self, coordinates):
+        self.coordinates = coordinates
+
 
 class Snake(BoardElement):
     """Represents snake on board"""
+
     def __init__(self, coordinates):
         BoardElement.__init__(self, coordinates)
-    
-    def update_snake(window,coordinates):
+
+    def update_snake(window, coordinates):
         """Increases snake length"""
+
 
 class Food(BoardElement):
     """Represents food for snake on board"""
+
     def __init__(self, coordinates):
         BoardElement.__init__(self, coordinates)
-    
+
     def update_food(coordinates):
         """randomly generate a food, represented as a dot on a board"""
-        
+
+
 class Wall(BoardElement):
     """Represents wall on board"""
+
     def __init__(self, coordinates):
         BoardElement.__init__(self, coordinates)
-    
+
 
 class Game:
     def __init__(self, player_name, high_score, game_status):
-        self.player_name=player_name
-        self.high_score=high_score
-        self.game_status=game_status
-    
+        self.player_name = player_name
+        self.high_score = high_score
+        self.game_status = game_status
+
     def terminate():
         """End game"""
 
+
 def initialise(window):
     """Sets up intial board before starting the game"""
-    board=Board()
-    
+    board = Board()
+
     # Get a list of all display coordinates
-    board.grid_points=d.calculate_display_coordinates()
-    
-    # Construct wall, i.e. boundary of the game
-    wall=Wall(d.wall_constructor())
+    board.grid_points = d.calculate_display_coordinates()
+
+    # Construct wall, i.e. boundary of the game and get a list of wall coordinates
+    wall = Wall(d.wall_constructor())
+
+    # Define initial body of snake
+    snake = Snake([(3, 2), (3, 3), (3, 4),(3,5)])
+    # Draw snake
+    board.draw_snake(window,snake.coordinates)
     
 
-if __name__=="__main__":
-    
+    # Draw food
+
+    # Reset player name and high score
+
+
+if __name__ == "__main__":
+
     import display_constructor as d
-    
-    # Get termnimal window object which is to be used as in main logic to draw elements
-    window=d.stdscr
 
+    # Get termnimal window object which is to be used as in main logic to draw elements
+    window = d.stdscr
+    
     # Start terminal window (as a drawing board)
     d.start_screen(window)
-    
+
 
 #   # Start game
-    game=Game("YG",0,"running")
+    game = Game("YG", 0, "running")
     initialise(window)
 
+    # End game
     d.end_screen(window)
 #     # wall_coordianates,
 #     # snake_coordinates,
@@ -78,7 +105,7 @@ if __name__=="__main__":
 #     # # Loop
 #     #   while game.status=="running":
 #             # run_game()
-#     #   
+#     #
 
 # def run_game():
 #     # Move snake
@@ -98,4 +125,3 @@ if __name__=="__main__":
 #     #     snake.update()
 #     #     else:
 #     #     # continue moving snake in same direction
-

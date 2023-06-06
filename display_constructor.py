@@ -2,7 +2,11 @@ import curses
 
 # BEGIN ncurses startup/initialization...
 # Initialize the curses object. Stdscr stands for standard screen i.e. display in the terminal
+
+
+
 stdscr = curses.initscr()
+
 
 def display_caught_exceptions(caughtExceptions):
 # Display Errors if any happened:
@@ -26,11 +30,11 @@ def start_screen(stdscr):
         if curses.has_colors():
             curses.start_color()
 
-        # Actually draws the text above to the positions specified.
-        stdscr.refresh()
+        
+        
 
         # Grabs a value from the keyboard without Enter having to be pressed (see cbreak above)
-        stdscr.getch()
+        # stdscr.getch()
 
         # Turn off cbreak mode...
         curses.nocbreak()
