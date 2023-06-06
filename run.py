@@ -18,9 +18,9 @@ print(70*'#')
 # Rules
 f = Figlet(font="contessa")
 print(colored(f.renderText("RULES"), 'red'))
-print("""You are a snake.Eat your prey and get as big as you can.
-Use arrow keys (up, down, left, right) to navigate.
-Do not eat yourself. Do not hit the wall.
+print("""> You are a snake.Eat your prey and get as big as you can.
+> Use arrow keys (up, down, left, right) to navigate.
+> Do not eat yourself. Do not hit the wall.
 """)
 print(70*'#')
 
@@ -30,8 +30,9 @@ wall = []
 
 
 def initialize(stdscr):
-    """Draw initial board, snake and food."""
+    """Draw initial board, snake and food. Set current score to zero."""
     # Draw board. Coordinates start from top left, in the format of y, x.
+    
     for i in range(20):
         stdscr.addstr(i,curses.COLS-1,"O")
         stdscr.addstr(i,0,"O")
@@ -41,13 +42,15 @@ def initialize(stdscr):
     # Draw snake
 
     # Draw food
+
+    # Set current score to zero
         
 # Creation of window object is taken from https://www.developer.com/languages/python/python-curses-text-drawing/
 
 
 def main():
   # BEGIN ncurses startup/initialization...
-  # Initialize the curses object.
+  # Initialize the curses object. stdscr refers to screen object
   stdscr = curses.initscr()
 
   # Do not echo keys back to the client.
@@ -69,14 +72,9 @@ def main():
   # END ncurses startup/initialization...
 
   caughtExceptions = ""
-  try:
-    # Coordinates start from top left, in the format of y, x.
-    # stdscr.addstr(0, 0, "Hello, world!")
-    # screenDetailText = "This screen is [" + str(curses.LINES) + "] high and [" + str(curses.COLS) + "] across."
-    # startingXPos = int ( (curses.COLS - len(screenDetailText))/2 )
-    # stdscr.addstr(3, startingXPos, screenDetailText)
-    # stdscr.addstr(5, curses.COLS - len("Press a key to quit."), "Press a key to quit.")
 
+  # Primay logic i.e. try statement
+  try:
     # # Autheticate user
     # is_user_autheticated=autheticate()
 

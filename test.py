@@ -24,16 +24,34 @@ def main():
   # stdscr.keypad(True)
 
   # END ncurses startup/initialization...
+  class wall:
+    pass
 
-  caughtExceptions = ""
-  try:
+  def draw_board():
+    """Draws board on screen. Returns the coordinates of the wall as list"""
+    
+    
     # Coordinates start from top left, in the format of y, x.
+    
     for i in range(20):
         stdscr.addstr(i,curses.COLS-1,"O")
         stdscr.addstr(i,0,"O")
     for i in range(curses.COLS):
         stdscr.addstr(0,i,"O")
         stdscr.addstr(20,i,"O")
+  
+  def initialise():
+    
+    walls=draw_board()
+
+    #draw_snake()
+
+    #draw_food()
+    
+
+  caughtExceptions = ""
+  try:
+    initialise()
 
     #stdscr.addstr(0, 0, "Hello, world!")
     screenDetailText = "This screen is [" + str(curses.LINES) + "] high and [" + str(curses.COLS) + "] across."
