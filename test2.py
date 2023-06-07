@@ -14,9 +14,14 @@ class Board:
         d.curses.curs_set(0)
         window.refresh()
         time.sleep(4)
-    def draw_food(window, food_coordinates):
+        
+    def draw_food(self, window, food_coordinates):
         """Draws a food element at given coordinates on grid"""
-
+        window.addstr(*food_coordinates[0], 'X')
+                
+        d.curses.curs_set(0)
+        window.refresh()
+        time.sleep(4)
 
 class BoardElement:
     def __init__(self, coordinates):
@@ -71,13 +76,13 @@ def initialise(window):
     wall = Wall(d.wall_constructor())
 
     # Define initial body of snake
-    snake = Snake([(3, 2), (3, 3), (3, 4),(3,5)])
+    snake = Snake([(3, 5), (3, 4), (3, 3),(3,2)])
     # Draw snake
     board.draw_snake(window,snake.coordinates)
     
-
     # Draw food
-
+    food=Food([(3,8)])
+    board.draw_food(window,food.coordinates)
     # Reset player name and high score
 
 
