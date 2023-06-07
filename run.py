@@ -26,115 +26,145 @@ print(70*'#')
 
 # Build game
 
-wall = []
+import time
+import random
 
+class Board:
 
-def initialize(stdscr):
-    """Draw initial board, snake and food. Set current score to zero."""
-    # Draw board. Coordinates start from top left, in the format of y, x.
-    
-    for i in range(20):
-        stdscr.addstr(i,curses.COLS-1,"O")
-        stdscr.addstr(i,0,"O")
-    for i in range(curses.COLS):
-        stdscr.addstr(0,i,"O")
-        stdscr.addstr(20,i,"O")
-    # Draw snake
+    grid_points = {}
 
-    # Draw food
-
-    # Set current score to zero
+    def draw_snake(self,window, coordinates):
+        """Draws a snake at given coordinates on the board"""
+        window.addstr(*coordinates[0], '@')
+        for segment in coordinates[1:]:
+            window.addstr(*segment, '*')
         
-# Creation of window object is taken from https://www.developer.com/languages/python/python-curses-text-drawing/
+        d.curses.curs_set(0)
+        window.refresh()
+        time.sleep(4)
+        
+    def draw_food(self, window, food_coordinates):
+        """Draws a food element at given coordinates on grid"""
+        window.addstr(*food_coordinates, 'X')
+                
+        d.curses.curs_set(0)
+        window.refresh()
+        time.sleep(4)
+
+class BoardElement:
+    def __init__(self, coordinates):
+        self.coordinates = coordinates
 
 
-def main():
-  # BEGIN ncurses startup/initialization...
-  # Initialize the curses object. stdscr refers to screen object
-  stdscr = curses.initscr()
+class Snake(BoardElement):
+    """Represents snake on board"""
 
-  # Do not echo keys back to the client.
-  curses.noecho()
+    def __init__(self, coordinates):
+        BoardElement.__init__(self, coordinates)
 
-  # Non-blocking or cbreak mode... do not wait for Enter key to be pressed.
-  curses.cbreak()
+    def update_snake(window, coordinates):
+        """Increases snake length"""
 
-  # Turn off blinking cursor
-  curses.curs_set(False)
+class Food(BoardElement):
+    """Represents food for snake on board"""
 
-  # Enable color if we can...
-  if curses.has_colors():
-    curses.start_color()
+    def __init__(self, coordinates):
+        BoardElement.__init__(self, coordinates)
 
-  # Optional - Enable the keypad. This also decodes multi-byte key sequences
-  # stdscr.keypad(True)
+    def update_food(coordinates):
+        """randomly generate a food, represented as a dot on a board"""
 
-  # END ncurses startup/initialization...
+class Wall(BoardElement):
+    """Represents wall on board"""
 
-  caughtExceptions = ""
+    def __init__(self, coordinates):
+        BoardElement.__init__(self, coordinates)
 
-  # Primay logic i.e. try statement
-  try:
-    # # Autheticate user
-    # is_user_autheticated=autheticate()
+class Game:
+    def __init__(self, player_name, high_score, game_status):
+        self.player_name = player_name
+        self.high_score = high_score
+        self.game_status = game_status
 
-    # # If user is autheticated, start the game
-    # if is_user_autheticated==True:
-    #   # Draw initial board, snake and food, set game score to zero
-      initialize(stdscr)
+    def terminate():
+        """End game"""
 
-    # # Loop
-    #   while True:
-    #   # Move snake
-    #     snake.move(direction)
+def get_food_coordinates(board,wall,snake):
+    """Returns a random point on board that is neither a wall nor a snake"""
+    food_coordinates= board.difference(wall,snake)
+    food_coordinate = random.choice(list(food_coordinates))
+    return food_coordinate
 
-    #   # Following the move, check the object grabbed i.e. wall, itself or food
-    #     grabbed_object=snake.grabbed_object()
+def initialise(window):
+    """Sets up intial board before starting the game"""
+    board = Board()
 
-    #   # Depending on the grabbed object, either terminate the game or increase snake size
-    #     if grabbed_object==wall or grabbed_object== itself:
-    #     # Terminate game
-    #     # Compare user's current score against recorded high score, update if necessary
-    #     # Take user back to home page
-    #     elif grabbed_object= food:
-    #     #update snake with new head and body
-    #     #update high score for given user
-    #     snake.update()
-    #     else:
-    #     # continue moving snake in same direction
+    # Get a list of all display coordinates as a set
+    board.grid_points = d.calculate_display_coordinates()
 
-    # Actually draws the text above to the positions specified.
-      stdscr.refresh()
+    # Construct wall, i.e. boundary of the game and get a list of wall coordinates
+    wall = Wall(d.wall_constructor())
 
-    # Grabs a value from the keyboard without Enter having to be pressed (see cbreak above)
-      stdscr.getch()
-  except Exception as err:
-   # Just printing from here will not work, as the program is still set to
-   # use ncurses.
-   # print ("Some error [" + str(err) + "] occurred.")
-   caughtExceptions = str(err)
+    # Define initial body of snake
+    snake = Snake([(3, 5), (3, 4), (3, 3),(3,2)])
+    # Draw snake at given coordinates
+    board.draw_snake(window,snake.coordinates)
+    
+    # Draw food at given coordinates
+    food=Food(get_food_coordinates(board.grid_points, wall.coordinates, set(snake.coordinates)))
+    board.draw_food(window,food.coordinates)
+    
+    # Reset player name and high score
 
-  # BEGIN ncurses shutdown/deinitialization...
-  # Turn off cbreak mode...
-  curses.nocbreak()
+    return board,wall,snake,food
 
-  # Turn echo back on.
-  curses.echo()
-
-  # Restore cursor blinking.
-  curses.curs_set(True)
-
-  # Turn off the keypad...
-  # stdscr.keypad(False)
-
-  # Restore Terminal to original state.
-  curses.endwin()
-
-  # END ncurses shutdown/deinitialization...
-
-  # Display Errors if any happened:
-  if "" != caughtExceptions:
-   print ("Got error(s) [" + caughtExceptions + "]")
 
 if __name__ == "__main__":
-  main()
+
+    import display_constructor as d
+
+    # Get termnimal window object which is to be used as in main logic to draw elements
+    window = d.stdscr
+    
+    # Start terminal window (as a drawing board)
+    d.start_screen(window)
+
+
+#   # Start game
+    game = Game("YG", 0, "running")
+    
+    board,wall,snake,food= initialise(window)
+
+    for i in range(2):
+        # Move snake
+        pass
+        
+    # End game
+    d.end_screen(window)
+#     # wall_coordianates,
+#     # snake_coordinates,
+#     # food_coordinates)
+
+#     # # Loop
+#     #   while game.status=="running":
+#             # run_game()
+#     #
+
+# def run_game():
+#     # Move snake
+#     #     snake.move(direction)
+
+#     #   # Following the move, check the object grabbed i.e. wall, itself or food
+#     #     grabbed_object=snake.grabbed_object()
+
+#     #   # Depending on the grabbed object, either terminate the game or increase snake size
+#     #     if grabbed_object==wall or grabbed_object== itself:
+#     #     # Terminate game
+#     #     # Compare user's current score against recorded high score, update if necessary
+#     #     # Take user back to home page
+#     #     elif grabbed_object= food:
+#     #     #update snake with new head and body
+#     #     #update high score for given user
+#     #     snake.update()
+#     #     else:
+#     #     # continue moving snake in same direction
