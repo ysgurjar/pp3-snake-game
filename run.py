@@ -69,10 +69,10 @@ class Snake(BoardElement):
     def __init__(self, coordinates):
         BoardElement.__init__(self, coordinates)
 
-    def remove(self,window):
+    def remove(self, window):
         """Remove previously drawn snake"""
         for c in self.coordinates:
-            window.addstr(*c,' ')
+            window.addstr(*c, ' ')
         d.curses.curs_set(0)
 
     def move_snake(self, direction):
@@ -160,11 +160,20 @@ if __name__ == "__main__":
 
     board, wall, snake, food = initialise(window)
 
+    directions = {
+        curses.KEY_UP: (-1, 0),
+        curses.KEY_DOWN: (1, 0),
+        curses.KEY_LEFT: (0, -1),
+        curses.KEY_RIGHT: (0, 1),
+        }
+
+    direction = directions[curses.KEY_RIGHT]
+    
     for i in range(3):
-        #remove previously drawn snake
+        # remove previously drawn snake
         snake.remove(window)
         # move snake to new coordinates
-        snake.move_snake((0, 1))
+        snake.move_snake(direction)
         # redraw snake
         board.draw_snake(window, snake.coordinates)
 
