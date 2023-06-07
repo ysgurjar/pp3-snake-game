@@ -25,7 +25,7 @@ def start_screen(stdscr):
 
         # Turn off blinking cursor
         curses.curs_set(False)
-
+        curses.leaveok(true)
         # Enable color if we can...
         if curses.has_colors():
             curses.start_color()
@@ -43,7 +43,7 @@ def start_screen(stdscr):
         curses.echo()
 
         # Restore cursor blinking.
-        curses.curs_set(True)
+        #curses.curs_set(True)
 
         # Turn off the keypad...
         # stdscr.keypad(False)
@@ -59,16 +59,16 @@ def start_screen(stdscr):
          
 def end_screen(stdscr):
      # Turn off cbreak mode...
-        curses.nocbreak()
+        #curses.nocbreak()
 
         # Turn echo back on.
         curses.echo()
 
         # Restore cursor blinking.
-        curses.curs_set(True)
+        #curses.curs_set(True)
 
         # Turn off the keypad...
-        # stdscr.keypad(False)
+        stdscr.keypad(False)
 
         # Restore Terminal to original state.
         curses.endwin()
