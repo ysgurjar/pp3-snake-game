@@ -17,7 +17,6 @@ def start_screen(stdscr):
 
     try:
         # Do not echo keys back to the client.
-
         curses.noecho()
 
         # Non-blocking or cbreak mode... do not wait for Enter key to be pressed.
@@ -30,26 +29,7 @@ def start_screen(stdscr):
         if curses.has_colors():
             curses.start_color()
 
-        
-        
 
-        # Grabs a value from the keyboard without Enter having to be pressed (see cbreak above)
-        # stdscr.getch()
-
-        # Turn off cbreak mode...
-        curses.nocbreak()
-
-        # Turn echo back on.
-        curses.echo()
-
-        # Restore cursor blinking.
-        #curses.curs_set(True)
-
-        # Turn off the keypad...
-        # stdscr.keypad(False)
-
-        # Restore Terminal to original state.
-        curses.endwin()
     except Exception as err:
         # Just printing from here will not work, as the program is still set to
         # use ncurses.
@@ -59,7 +39,7 @@ def start_screen(stdscr):
          
 def end_screen(stdscr):
      # Turn off cbreak mode...
-        #curses.nocbreak()
+        curses.nocbreak()
 
         # Turn echo back on.
         curses.echo()
