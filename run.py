@@ -3,7 +3,7 @@
 # prettify-your-terminal-text-with-termcolor-and-pyfiglet-880de83fda6b
 
 
-import display_constructor as d
+
 import random
 import time
 import sys
@@ -149,7 +149,7 @@ def initialise(window):
 
     return board, wall, snake, food
 
-
+import display_constructor as d
 # Get termnimal window object which is to be used as in main logic to draw elements
 window = d.stdscr
 
@@ -197,18 +197,18 @@ def main(window):
         # redraw snake
         board.draw_snake(window, snake.coordinates)
 
-        # Check whether snake has encountered itsef, food or wall
+        # # Check whether snake has encountered itsef, food or wall
 
-        encountered_object = encountered_object(
-            snake_new_coordinates,
-            snake_old_coordinates,
-            wall.coordinates)
+        # encountered_object = encountered_object(
+        #     snake_new_coordinates,
+        #     snake_old_coordinates,
+        #     wall.coordinates)
 
-        if encountered_object=="wall" or encountered_object=="snake":
-            """game over"""
+        # if encountered_object=="wall" or encountered_object=="snake":
+        #     """game over"""
         
-        if encountered_object=="food":
-            """increase snake length"""
+        # if encountered_object=="food":
+        #     """increase snake length"""
 
     d.end_screen(window)
     # End game
