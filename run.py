@@ -5,7 +5,7 @@
 import random
 import time
 import sys
-import curses
+from curses import wrapper
 from termcolor import colored
 from pyfiglet import Figlet
 
@@ -47,7 +47,7 @@ class Board:
 
         d.curses.curs_set(0)
         window.refresh()
-        time.sleep(2)
+        time.sleep(0.5)
 
     def draw_food(self, window, food_coordinates):
         """Draws a food element at given coordinates on grid"""
@@ -55,7 +55,7 @@ class Board:
 
         d.curses.curs_set(0)
         window.refresh()
-        time.sleep(2)
+        time.sleep(0.5)
 
 
 class BoardElement:
@@ -143,55 +143,60 @@ def initialise(window):
 
     return board, wall, snake, food
 
+import display_constructor as d
 
-if __name__ == "__main__":
+# Get termnimal window object which is to be used as in main logic to draw elements
+window = d.stdscr
 
-    import display_constructor as d
+# Start terminal window (as a drawing board)
+d.start_screen(window)
 
-    # Get termnimal window object which is to be used as in main logic to draw elements
-    window = d.stdscr
+# Don't block I/O calls
+window.nodelay(True)
 
-    # Start terminal window (as a drawing board)
-    d.start_screen(window)
+def main(window):
 
-    # Don't block I/O calls
-    window.nodelay(True)
 
-#   # Start game
+    # Start game
     game = Game("YG", 0, "running")
 
     board, wall, snake, food = initialise(window)
 
     directions = {
         # 'w':119, 'W': 087 (Up)
-        119: (-1,0),
-        87: (-1,0),
+        119: (-1, 0),
+        87: (-1, 0),
         # 'a':97 , 'A': 65 (Left)
-        97: (0,-1),
-        65: (0,-1),
+        97: (0, -1),
+        65: (0, -1),
         # 'd':100 , 'D': 68 (Right)
-        100 : (0, 1),
+        100: (0, 1),
         68: (0, 1),
         # 's' : 114 , 'S': 083 (Down)
-        115:(1, 0),
-        83 : (1,0)
-        }
+        115: (1, 0),
+        83: (1, 0)
+    }
 
     direction = directions[100]
-    
+
     for i in range(3):
         # remove previously drawn snake
         snake.remove(window)
         # move snake to new coordinates either based
         # on default behaviour or uesr key input
-        direction = directions.get(window.getch(), direction)
-        
+        direction = directions.get(window.getkey(), direction)
+
         snake.move_snake(direction)
         # redraw snake
         board.draw_snake(window, snake.coordinates)
 
     d.end_screen(window)
     # End game
+
+
+if __name__ == "__main__":
+
+    wrapper(main)
 
 #     # wall_coordianates,
 #     # snake_coordinates,
