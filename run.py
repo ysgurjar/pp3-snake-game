@@ -3,6 +3,7 @@
 # prettify-your-terminal-text-with-termcolor-and-pyfiglet-880de83fda6b
 
 
+import display_constructor as d
 import random
 import time
 import sys
@@ -120,6 +121,10 @@ def get_food_coordinates(board, wall, snake):
     return food_coordinate
 
 
+def grabbed_object():
+    """Returns the object that snake intercepts as it moves on the grid"""
+
+
 def initialise(window):
     """Sets up intial board before starting the game"""
     board = Board()
@@ -144,7 +149,6 @@ def initialise(window):
 
     return board, wall, snake, food
 
-import display_constructor as d
 
 # Get termnimal window object which is to be used as in main logic to draw elements
 window = d.stdscr
@@ -163,34 +167,52 @@ def main(window):
 
     board, wall, snake, food = initialise(window)
 
-    directions= {
-        "KEY_UP": (-1,0),
-        "KEY_DOWN": (1,0),
-        "KEY_LEFT":(0,-1),
-        "KEY_RIGHT":(0,1)
+    directions = {
+        "KEY_UP": (-1, 0),
+        "KEY_DOWN": (1, 0),
+        "KEY_LEFT": (0, -1),
+        "KEY_RIGHT": (0, 1)
     }
     direction = directions.get("KEY_RIGHT")
 
     for i in range(30):
+
+        # save the coordinates of snake
+        snake_old_coordinates = snake.coordinates
         # remove previously drawn snake
         snake.remove(window)
         # move snake to new coordinates either based
         # on default behaviour or uesr key input
         try:
-            capture_key=window.getkey()
+            capture_key = window.getkey()
         except:
-            capture_key=None
-        
-        direction=directions.get(capture_key,direction)
+            capture_key = None
+
+        direction = directions.get(capture_key, direction)
 
         snake.move_snake(direction)
+
+        # Save the new coordinates of snake
+        snake_new_coordinates = snake.coordinates
         # redraw snake
         board.draw_snake(window, snake.coordinates)
+
+        # Check whether snake has encountered itsef, food or wall
+
+        encountered_object = encountered_object(
+            snake_new_coordinates,
+            snake_old_coordinates,
+            wall.coordinates)
+
+        if encountered_object=="wall" or encountered_object=="snake":
+            """game over"""
+        
+        if encountered_object=="food":
+            """increase snake length"""
 
     d.end_screen(window)
     # End game
 
-    
 
 if __name__ == "__main__":
 
