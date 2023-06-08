@@ -2,6 +2,7 @@
 # Inspired from https://towardsdatascience.com/
 # prettify-your-terminal-text-with-termcolor-and-pyfiglet-880de83fda6b
 
+
 import random
 import time
 import sys
@@ -154,37 +155,33 @@ d.start_screen(window)
 # Don't block I/O calls
 window.nodelay(True)
 
-def main(window):
 
+def main(window):
 
     # Start game
     game = Game("YG", 0, "running")
 
     board, wall, snake, food = initialise(window)
 
-    directions = {
-        # 'w':119, 'W': 087 (Up)
-        119: (-1, 0),
-        87: (-1, 0),
-        # 'a':97 , 'A': 65 (Left)
-        97: (0, -1),
-        65: (0, -1),
-        # 'd':100 , 'D': 68 (Right)
-        100: (0, 1),
-        68: (0, 1),
-        # 's' : 114 , 'S': 083 (Down)
-        115: (1, 0),
-        83: (1, 0)
+    directions= {
+        "KEY_UP": (-1,0),
+        "KEY_DOWN": (1,0),
+        "KEY_LEFT":(0,-1),
+        "KEY_RIGHT":(0,1)
     }
+    direction = directions.get("KEY_RIGHT")
 
-    direction = directions[100]
-
-    for i in range(3):
+    for i in range(30):
         # remove previously drawn snake
         snake.remove(window)
         # move snake to new coordinates either based
         # on default behaviour or uesr key input
-        direction = directions.get(window.getkey(), direction)
+        try:
+            capture_key=window.getkey()
+        except:
+            capture_key=None
+        
+        direction=directions.get(capture_key,direction)
 
         snake.move_snake(direction)
         # redraw snake
@@ -193,6 +190,7 @@ def main(window):
     d.end_screen(window)
     # End game
 
+    
 
 if __name__ == "__main__":
 
