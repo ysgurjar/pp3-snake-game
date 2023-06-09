@@ -3,7 +3,6 @@
 # prettify-your-terminal-text-with-termcolor-and-pyfiglet-880de83fda6b
 
 
-
 import random
 import time
 import sys
@@ -121,8 +120,19 @@ def get_food_coordinates(board, wall, snake):
     return food_coordinate
 
 
-def grabbed_object():
+def find_encountered_object(snake_head_position,
+                            snake_old_coordinates,
+                            wall_coordinates,
+                            food_coordinates):
     """Returns the object that snake intercepts as it moves on the grid"""
+    if set(snake_head_position).intersection(set(snake_old_coordinates)) != set():
+        return "snake"
+
+    if set(snake_head_position).intersection(set(wall_coordinates)) != set():
+        return "wall"
+
+    if set(snake_head_position).intersection(set(food_coordinates)) != set():
+        return "food"
 
 
 def initialise(window):
@@ -150,17 +160,16 @@ def initialise(window):
     return board, wall, snake, food
 
 import display_constructor as d
+
 # Get termnimal window object which is to be used as in main logic to draw elements
 window = d.stdscr
 
-# Start terminal window (as a drawing board)
-d.start_screen(window)
-
-# Don't block I/O calls
-window.nodelay(True)
-
-
 def main(window):
+    # Start terminal window (as a drawing board)
+    d.start_screen(window)
+
+    # Don't block I/O calls
+    window.nodelay(True)
 
     # Start game
     game = Game("YG", 0, "running")
@@ -168,17 +177,17 @@ def main(window):
     board, wall, snake, food = initialise(window)
 
     directions = {
-        "KEY_UP": (-1, 0),
-        "KEY_DOWN": (1, 0),
+      "KEY_UP": (-1, 0),
+      "KEY_DOWN": (1, 0),
         "KEY_LEFT": (0, -1),
         "KEY_RIGHT": (0, 1)
-    }
+      }
     direction = directions.get("KEY_RIGHT")
 
-    for i in range(30):
+    for i in range(300):
 
         # save the coordinates of snake
-        snake_old_coordinates = snake.coordinates
+        snake_old_coordinates = list(snake.coordinates)
         # remove previously drawn snake
         snake.remove(window)
         # move snake to new coordinates either based
@@ -193,30 +202,44 @@ def main(window):
         snake.move_snake(direction)
 
         # Save the new coordinates of snake
-        snake_new_coordinates = snake.coordinates
+        snake_head_position = [list(snake.coordinates)[0]]
         # redraw snake
         board.draw_snake(window, snake.coordinates)
 
-        # # Check whether snake has encountered itsef, food or wall
+        # Check whether snake has encountered itsef, food or wall
 
-        # encountered_object = encountered_object(
-        #     snake_new_coordinates,
-        #     snake_old_coordinates,
-        #     wall.coordinates)
+        encountered_object = find_encountered_object(
+            snake_head_position,
+            snake_old_coordinates,
+            wall.coordinates,
+            [(food.coordinates)])
 
-        # if encountered_object=="wall" or encountered_object=="snake":
-        #     """game over"""
-        
-        # if encountered_object=="food":
-        #     """increase snake length"""
+        if encountered_object == "wall" or encountered_object == "snake":
+            """game over"""
+            break
+
+        if encountered_object == "food":
+            """increase snake length"""
+
+            # increase snake length
+            snake_old_coordinates.insert(0, snake_head_position[0])
+            snake_new_coordinates = snake_old_coordinates
+            snake.coordinates = snake_new_coordinates.copy()
+
+            # Draw food at given coordinates
+            food = Food(get_food_coordinates(board.grid_points,
+                                             wall.coordinates,
+                                             set(snake.coordinates)))
+            board.draw_food(window, food.coordinates)
 
     d.end_screen(window)
-    # End game
-
+    # End gam
 
 if __name__ == "__main__":
+    
 
     wrapper(main)
+
 
 #     # wall_coordianates,
 #     # snake_coordinates,
