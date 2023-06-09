@@ -41,15 +41,25 @@ class Board:
         # Delete any residual charater
         for e in coordinates:
             window.addstr(*e, ' ')
+            window.refresh()
 
-        window.refresh()
+        
 
         window.addstr(*coordinates[0], '@')
         for segment in coordinates[1:]:
             window.addstr(*segment, '*')
+            window.refresh()
 
+        
         #d.curses.curs_set(0)
         window.refresh()
+        
+        window.noutrefresh()
+        d.curses.setsyx(*coordinates[-1])
+        d.curses.doupdate()
+
+        
+
         time.sleep(0.2)
 
     def draw_food(self, window, food_coordinates):
