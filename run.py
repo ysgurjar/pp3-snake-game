@@ -46,7 +46,7 @@ class Board:
         for segment in coordinates[1:]:
             window.addstr(*segment, '*')
 
-        d.curses.curs_set(0)
+        #d.curses.curs_set(0)
         window.refresh()
         time.sleep(0.2)
 
@@ -54,7 +54,7 @@ class Board:
         """Draws a food element at given coordinates on grid"""
         window.addstr(*food_coordinates, 'X')
 
-        d.curses.curs_set(0)
+        #d.curses.curs_set(0)
         window.refresh()
         
 
