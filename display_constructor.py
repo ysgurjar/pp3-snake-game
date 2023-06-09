@@ -23,7 +23,7 @@ def start_screen(stdscr):
         curses.cbreak()
 
         # Turn off blinking cursor
-        curses.curs_set(False)
+        #curses.curs_set(False)
         
         # Enable color if we can...
         if curses.has_colors():

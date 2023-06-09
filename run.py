@@ -48,7 +48,7 @@ class Board:
 
         d.curses.curs_set(0)
         window.refresh()
-        time.sleep(0.5)
+        time.sleep(0.2)
 
     def draw_food(self, window, food_coordinates):
         """Draws a food element at given coordinates on grid"""
@@ -56,7 +56,7 @@ class Board:
 
         d.curses.curs_set(0)
         window.refresh()
-        time.sleep(0.5)
+        
 
 
 class BoardElement:
