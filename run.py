@@ -6,6 +6,7 @@
 import random
 import time
 import sys
+import os
 from curses import wrapper
 from termcolor import colored
 from pyfiglet import Figlet
@@ -13,19 +14,20 @@ from pyfiglet import Figlet
 # Font styles can be found at http://www.figlet.org/examples.html
 
 # Welcome Text
-print(70*'#')
-f = Figlet(font="standard")
-print(colored(f.renderText('WELCOME TO SNAKE'), 'green'))
-print(70*'#')
+def welcome_text():
+    print(70*'#')
+    f = Figlet(font="standard")
+    print(colored(f.renderText('WELCOME TO SNAKE'), 'green'))
+    print(70*'#')
 
-# Rules
-f = Figlet(font="contessa")
-print(colored(f.renderText("RULES"), 'red'))
-print("""> You are a snake.Eat your prey and get as big as you can.
-> Use arrow keys (up, down, left, right) to navigate.
-> Do not eat yourself. Do not hit the wall.
-""")
-print(70*'#')
+    # Rules
+    f = Figlet(font="contessa")
+    print(colored(f.renderText("RULES"), 'red'))
+    print("""> You are a snake.Eat your prey and get as big as you can.
+    > Use arrow keys (up, down, left, right) to navigate.
+    > Do not eat yourself. Do not hit the wall.
+    """)
+    print(70*'#')
 
 # Build game
 
@@ -232,13 +234,14 @@ def main(window):
                                              set(snake.coordinates)))
             board.draw_food(window, food.coordinates)
 
-    d.end_screen(window)
+    
+    #d.end_screen(window)
     # End gam
 
 if __name__ == "__main__":
-    
-
     wrapper(main)
+    os.system('clear')
+    welcome_text()
 
 
 #     # wall_coordianates,
