@@ -74,7 +74,7 @@ class Snake(BoardElement):
         """Remove previously drawn snake"""
         for c in self.coordinates:
             window.addstr(*c, ' ')
-        d.curses.curs_set(0)
+        #d.curses.curs_set(0)
 
     def move_snake(self, direction):
         """Moves snake around the board"""
