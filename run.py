@@ -116,9 +116,9 @@ class Wall(BoardElement):
 
 
 class Game:
-    def __init__(self, player_name, high_score, game_status):
+    def __init__(self, player_name, score, game_status):
         self.player_name = player_name
-        self.high_score = high_score
+        self.score = score
         self.game_status = game_status
 
     def terminate():
@@ -237,6 +237,10 @@ def main(window):
             snake_old_coordinates.insert(0, snake_head_position[0])
             snake_new_coordinates = snake_old_coordinates
             snake.coordinates = snake_new_coordinates.copy()
+
+            # increase score
+            game.score=game.score+10
+            window.addstr(22,1, " score:" + str(game.score))
 
             # Draw food at given coordinates
             food = Food(get_food_coordinates(board.grid_points,
