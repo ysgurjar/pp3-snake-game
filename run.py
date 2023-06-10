@@ -13,6 +13,7 @@ from pyfiglet import Figlet
 
 # Font styles can be found at http://www.figlet.org/examples.html
 
+
 # Welcome Text
 def welcome_text():
     print(70*'#')
@@ -42,23 +43,16 @@ class Board:
         for e in coordinates:
             window.addstr(*e, ' ')
             window.refresh()
-
-        
-
         window.addstr(*coordinates[0], '@')
+
         for segment in coordinates[1:]:
             window.addstr(*segment, '*')
             window.refresh()
 
-        
-        #d.curses.curs_set(0)
+        # d.curses.curs_set(0) - optional. Turned off for heroku CLI
         window.refresh()
-        
-        window.noutrefresh()
         d.curses.setsyx(*coordinates[-1])
         d.curses.doupdate()
-
-        
 
         time.sleep(0.2)
 
@@ -66,9 +60,8 @@ class Board:
         """Draws a food element at given coordinates on grid"""
         window.addstr(*food_coordinates, 'X')
 
-        #d.curses.curs_set(0)
+        # d.curses.curs_set(0) - optional. Turned off for heroku CLI
         window.refresh()
-        
 
 
 class BoardElement:
@@ -86,7 +79,7 @@ class Snake(BoardElement):
         """Remove previously drawn snake"""
         for c in self.coordinates:
             window.addstr(*c, ' ')
-        #d.curses.curs_set(0)
+        # d.curses.curs_set(0) - optional. Turned off for heroku CLI
 
     def move_snake(self, direction):
         """Moves snake around the board"""
@@ -154,7 +147,7 @@ def initialise(window):
     # Get a list of all display coordinates as a set
     board.grid_points = d.calculate_display_coordinates()
 
-    # Construct wall, i.e. boundary of the game and get a list of wall coordinates
+    # Construct boundary of the game and get a list of wall coordinates
     wall = Wall(d.wall_constructor())
 
     # Define initial body of snake
@@ -171,10 +164,12 @@ def initialise(window):
 
     return board, wall, snake, food
 
+
 import display_constructor as d
 
-# Get termnimal window object which is to be used as in main logic to draw elements
+# Get termnimal window object. To be used as in main logic to draw elements
 window = d.stdscr
+
 
 def main(window):
     # Start terminal window (as a drawing board)
@@ -191,8 +186,8 @@ def main(window):
     directions = {
       "KEY_UP": (-1, 0),
       "KEY_DOWN": (1, 0),
-        "KEY_LEFT": (0, -1),
-        "KEY_RIGHT": (0, 1)
+      "KEY_LEFT": (0, -1),
+      "KEY_RIGHT": (0, 1)
       }
     direction = directions.get("KEY_RIGHT")
 
@@ -210,13 +205,13 @@ def main(window):
             capture_key = None
 
         match (direction, capture_key):
-            case ((-1,0),"KEY_DOWN"):
+            case ((-1, 0), "KEY_DOWN"):
                 pass
-            case ((1,0),"KEY_UP"):
+            case ((1, 0), "KEY_UP"):
                 pass
-            case ((0,-1),"KEY_RIGHT"):
+            case ((0, -1), "KEY_RIGHT"):
                 pass
-            case ((0,1),"KEY_LEFT"):
+            case ((0, 1), "KEY_LEFT"):
                 pass
             case _:
                 direction = directions.get(capture_key, direction)
@@ -249,8 +244,8 @@ def main(window):
             snake.coordinates = snake_new_coordinates.copy()
 
             # increase score
-            game.score=game.score+10
-            window.addstr(22,1, " score:" + str(game.score))
+            game.score = game.score + 10
+            window.addstr(22, 1, " score:" + str(game.score))
 
             # Draw food at given coordinates
             food = Food(get_food_coordinates(board.grid_points,
@@ -258,39 +253,11 @@ def main(window):
                                              set(snake.coordinates)))
             board.draw_food(window, food.coordinates)
 
-    
-    #d.end_screen(window)
+    # d.end_screen(window)
     # End gam
+
 
 if __name__ == "__main__":
     wrapper(main)
     os.system('clear')
     welcome_text()
-
-
-#     # wall_coordianates,
-#     # snake_coordinates,
-#     # food_coordinates)
-#     # # Loop
-#     #   while game.status=="running":
-#             # run_game()
-#     #
-
-# def run_game():
-#     # Move snake
-#     #     snake.move(direction)
-
-#     #   # Following the move, check the object grabbed i.e. wall, itself or food
-#     #     grabbed_object=snake.grabbed_object()
-
-#     #   # Depending on the grabbed object, either terminate the game or increase snake size
-#     #     if grabbed_object==wall or grabbed_object== itself:
-#     #     # Terminate game
-#     #     # Compare user's current score against recorded high score, update if necessary
-#     #     # Take user back to home page
-#     #     elif grabbed_object= food:
-#     #     #update snake with new head and body
-#     #     #update high score for given user
-#     #     snake.update()
-#     #     else:
-#     #     # continue moving snake in same direction
