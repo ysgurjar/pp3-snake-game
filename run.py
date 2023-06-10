@@ -209,7 +209,17 @@ def main(window):
         except:
             capture_key = None
 
-        direction = directions.get(capture_key, direction)
+        match (direction, capture_key):
+            case ((-1,0),"KEY_DOWN"):
+                pass
+            case ((1,0),"KEY_UP"):
+                pass
+            case ((0,-1),"KEY_RIGHT"):
+                pass
+            case ((0,1),"KEY_LEFT"):
+                pass
+            case _:
+                direction = directions.get(capture_key, direction)
 
         snake.move_snake(direction)
 
