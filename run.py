@@ -253,9 +253,6 @@ def main(window):
                                              set(snake.coordinates)))
             board.draw_food(window, food.coordinates)
 
-    # d.end_screen(window)
-    # End gam
-
 
 if __name__ == "__main__":
     wrapper(main)
