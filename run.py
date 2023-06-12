@@ -8,27 +8,10 @@ import time
 import sys
 import os
 from curses import wrapper
-from termcolor import colored
-from pyfiglet import Figlet
+import introduction_screen as intro
 
 # Font styles can be found at http://www.figlet.org/examples.html
 
-
-# Welcome Text
-def welcome_text():
-    print(70*'#')
-    f = Figlet(font="standard")
-    print(colored(f.renderText('WELCOME TO SNAKE'), 'green'))
-    print(70*'#')
-
-    # Rules
-    f = Figlet(font="contessa")
-    print(colored(f.renderText("RULES"), 'red'))
-    print("""> You are a snake.Eat your prey and get as big as you can.
-    > Use arrow keys (up, down, left, right) to navigate.
-    > Do not eat yourself. Do not hit the wall.
-    """)
-    print(70*'#')
 
 # Build game
 
@@ -255,6 +238,47 @@ def main(window):
 
 
 if __name__ == "__main__":
+    """ Main executable logic """
+    # welcome text
+    intro.welcome_text()
+    # ask user to choose between sign-in and sign-up.
+    is_user_choice_valid, user_choice= choose_signing_option()
+    # user can press 9 to navigate back to home menu
+
+    # get user_name
+    if is_user_choice_valid==True:
+        user_name=get_user_name()
+    # validate user name
+    is_username_valid=validate_username(user_name)
+    # get password
+    if is_username_valid==True:
+        pwd=get_pwd(user_name)
+    # validate password
+    is_pwd_valid=validate_pwd(user_choice, pwd)
+
+    # run additional validation
+    is_add_validation_ok= additional_validation(user_name, pwd)
+    # write user name and password to google sheet
+    if is_add_validation_ok==True:
+        g_sheet_update_status=write_userinfo(user_name,pwd)
+    # confirm user status as signed in
+    if g_sheet_update_status==True:
+        # print (" you are logg in now")
+        # your game will begin in 5,4,3,2,1...
+    # user can press 8 to sign out 
+    
+    # start game
     wrapper(main)
+    # end game
     os.system('clear')
-    welcome_text()
+    # write high score if necessary
+
+    # restart game for same user with an option to sign out and sign in as a new user
+
+    # ask user to sign 
+
+    # if user name and password are validated, 
+    
+    
+    
+    
