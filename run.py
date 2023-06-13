@@ -157,7 +157,7 @@ import display_constructor as d
 
 def run_game(window):
     # Start terminal window (as a drawing board)
-    d.start_screen(window)
+    #d.start_screen(window)
 
     # Don't block I/O calls
     window.nodelay(True)
@@ -217,6 +217,7 @@ def run_game(window):
 
         if encountered_object == "wall" or encountered_object == "snake":
             """game over"""
+            d.clear_screen(board.grid_points)
             break
 
         if encountered_object == "food":
@@ -238,7 +239,7 @@ def run_game(window):
             board.draw_food(window, food.coordinates)
 
 
-if __name__ == "__main__":
+def main():
     """ Main executable logic """
     # welcome text
     intro.welcome_text()
@@ -256,12 +257,13 @@ if __name__ == "__main__":
         if is_username_valid==True:
             pwd=a.get_pwd()
         # validate password
-        is_pwd_valid=a.validate_pwd(pwd)
+        is_pwd_valid,pwd=a.validate_pwd(pwd)
 
         # run additional validation
         is_add_validation_ok= a.additional_validation(user_name, pwd, user_choice)
         # write user name and password to google sheet
-        #if is_add_validation_ok==True:
+        if is_add_validation_ok==True:
+            break
             #g_sheet_update_status=write_userinfo(user_name,pwd)
         # confirm user status as signed in
         #if g_sheet_update_status==True:
@@ -274,7 +276,7 @@ if __name__ == "__main__":
     if start_game==True:
         
 
-        d.stdscr = curses.initscr()
+        d.stdscr = d.curses.initscr()
         window = d.stdscr
         wrapper(run_game)
     # end game
@@ -286,6 +288,10 @@ if __name__ == "__main__":
     # ask user to sign 
 
     # if user name and password are validated, 
+
+if __name__ == "__main__":
+    while True:
+        main()
     
     
     

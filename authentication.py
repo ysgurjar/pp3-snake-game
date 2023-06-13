@@ -21,7 +21,7 @@ def validate_user_name(u_name):
     if u_name.isalnum() == True:
         # check char length
         if len(u_name) > 3:
-            return True , u_name
+            return True, u_name
 
         else:
             print("Invalid input")
@@ -38,10 +38,10 @@ def validate_pwd(pwd):
     if pwd.isalnum() == True:
         # check char length
         if len(pwd) >= 8:
-            return True
-    else:
-        print("Invalid input")
-        return validate_pwd(get_pwd())
+            return True, pwd
+        else:
+            print("Invalid input")
+            return validate_pwd(get_pwd())
 
 
 def additional_validation(u_name, pwd, selected_option):
@@ -49,34 +49,41 @@ def additional_validation(u_name, pwd, selected_option):
     # check if  user name already exists db
     u_name_from_db = ["patricia", "ysgurjar"]
     is_user_in_db = u_name in u_name_from_db
-    print("User already exists in database.")
 
     # get the pwd for that username from db and check if it matches
     pwd_from_db_for_given_user = "yash1234"
-    is_pwd_match=pwd_from_db_for_given_user==pwd
+    is_pwd_match = pwd_from_db_for_given_user == pwd
 
     # check for additional validation
-    match (is_user_in_db,is_pwd_match,selected_option):
+    match (is_user_in_db, is_pwd_match, selected_option):
 
         # allow - new user is signing up with unique user name
         case (False, None, "2"):
             print("Sign up successful. \n")
             return True
-        
+
         # allow - existing user is singing in with matching pwd
         case (True, True, "1"):
-            print ("Sing in successful. \n")
+            print("Sing in successful. \n")
             return True
-        
+
         # prevent - new user singing up with existing user name and existing pwd
-        case (True,True,"2"):
+        case (True, True, "2"):
             print("Username already exist.")
             print("Please select sign up if you are existing user.")
             return False
-        
+
         # prevent - new user singing up with existing user name and new pwd
         case (True, False, "2"):
             print("Username already exists.")
             print("Retry by choosing another username")
-            print("If you are an existing user and forgot your pwd, please create a new login")
+            print(
+                "If you are an existing user and forgot your pwd, please create a new login")
+            return False
+        
+        # prevent - sign in if username does not exist
+        case _:
+            print("User name does not exist. Please retry.")
+            print(
+                "If you are an existing user and forgot your pwd, please create a new login")
             return False

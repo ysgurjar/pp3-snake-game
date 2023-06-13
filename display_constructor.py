@@ -72,3 +72,7 @@ def calculate_display_coordinates():
         for y in range(curses.COLS-1):
             grid_points.add((x,y))
     return grid_points
+
+def clear_screen(screen_points):
+    for point in screen_points:
+        stdscr.addstr(*point," ")
