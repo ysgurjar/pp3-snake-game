@@ -274,8 +274,6 @@ def main():
     start_game=True
     # start game
     if start_game==True:
-        
-
         d.stdscr = d.curses.initscr()
         window = d.stdscr
         wrapper(run_game)

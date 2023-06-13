@@ -18,14 +18,11 @@ def get_user_name():
 
 def validate_user_name(u_name):
     # check if username is alphanumeric
-    if u_name.isalnum() == True:
-        # check char length
-        if len(u_name) > 3:
-            return True, u_name
-
-        else:
-            print("Invalid input")
-            return validate_user_name(get_user_name())
+    if u_name.isalnum() == True and len(u_name)>3:
+        return True, u_name
+    else:
+        print("Invalid input")
+        return validate_user_name(get_user_name())
 
 
 def get_pwd():
@@ -35,13 +32,11 @@ def get_pwd():
 
 def validate_pwd(pwd):
     # check if it is alphanumeric
-    if pwd.isalnum() == True:
-        # check char length
-        if len(pwd) >= 8:
-            return True, pwd
-        else:
-            print("Invalid input")
-            return validate_pwd(get_pwd())
+    if pwd.isalnum() == True and len(pwd)>=8:
+        return True, pwd
+    else:
+        print("Invalid input")
+        return validate_pwd(get_pwd())
 
 
 def additional_validation(u_name, pwd, selected_option):
@@ -83,7 +78,7 @@ def additional_validation(u_name, pwd, selected_option):
         
         # prevent - sign in if username does not exist
         case _:
-            print("User name does not exist. Please retry.")
+            print("You want to sign in but user name does not exist. Please retry.")
             print(
                 "If you are an existing user and forgot your pwd, please create a new login")
             return False
