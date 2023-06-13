@@ -9,6 +9,7 @@ import sys
 import os
 from curses import wrapper
 import introduction_screen as intro
+import authentication as a
 
 # Font styles can be found at http://www.figlet.org/examples.html
 
@@ -151,10 +152,10 @@ def initialise(window):
 import display_constructor as d
 
 # Get termnimal window object. To be used as in main logic to draw elements
-window = d.stdscr
 
 
-def main(window):
+
+def run_game(window):
     # Start terminal window (as a drawing board)
     d.start_screen(window)
 
@@ -241,34 +242,41 @@ if __name__ == "__main__":
     """ Main executable logic """
     # welcome text
     intro.welcome_text()
-    # ask user to choose between sign-in and sign-up.
-    is_user_choice_valid, user_choice= choose_signing_option()
-    # user can press 9 to navigate back to home menu
+    while True:
+        # ask user to choose between sign-in and sign-up.
+        is_user_choice_valid, user_choice= a.choose_signing_option()
+        # user can press 9 to navigate back to home menu
 
-    # get user_name
-    if is_user_choice_valid==True:
-        user_name=get_user_name()
-    # validate user name
-    is_username_valid=validate_username(user_name)
-    # get password
-    if is_username_valid==True:
-        pwd=get_pwd(user_name)
-    # validate password
-    is_pwd_valid=validate_pwd(user_choice, pwd)
+        # get user_name
+        if is_user_choice_valid==True:
+            user_name=a.get_user_name()
+        # validate user name
+        is_username_valid, user_name=a.validate_user_name(user_name)
+        # get password
+        if is_username_valid==True:
+            pwd=a.get_pwd()
+        # validate password
+        is_pwd_valid=a.validate_pwd(pwd)
 
-    # run additional validation
-    is_add_validation_ok= additional_validation(user_name, pwd)
-    # write user name and password to google sheet
-    if is_add_validation_ok==True:
-        g_sheet_update_status=write_userinfo(user_name,pwd)
-    # confirm user status as signed in
-    if g_sheet_update_status==True:
-        # print (" you are logg in now")
-        # your game will begin in 5,4,3,2,1...
-    # user can press 8 to sign out 
-    
+        # run additional validation
+        is_add_validation_ok= a.additional_validation(user_name, pwd, user_choice)
+        # write user name and password to google sheet
+        #if is_add_validation_ok==True:
+            #g_sheet_update_status=write_userinfo(user_name,pwd)
+        # confirm user status as signed in
+        #if g_sheet_update_status==True:
+        pass
+            # print (" you are logg in now")
+            # your game will begin in 5,4,3,2,1...
+        # user can press 8 to sign out 
+    start_game=True
     # start game
-    wrapper(main)
+    if start_game==True:
+        
+
+        d.stdscr = curses.initscr()
+        window = d.stdscr
+        wrapper(run_game)
     # end game
     os.system('clear')
     # write high score if necessary

@@ -3,11 +3,6 @@ import curses
 # BEGIN ncurses startup/initialization...
 # Initialize the curses object. Stdscr stands for standard screen i.e. display in the terminal
 
-
-
-stdscr = curses.initscr()
-
-
 def display_caught_exceptions(caughtExceptions):
 # Display Errors if any happened:
     if "" != caughtExceptions:
