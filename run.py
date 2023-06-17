@@ -176,7 +176,7 @@ def run_game(window):
       }
     direction = directions.get("KEY_RIGHT")
 
-    for i in range(300):
+    while True:
 
         # save the coordinates of snake
         snake_old_coordinates = list(snake.coordinates)
@@ -220,14 +220,14 @@ def run_game(window):
             """game over"""
             d.clear_screen(board.grid_points)
             #intro.game_over_text(game.score,100)
-            window.addstr(3, 1, "Game over !!! ")
+            """window.addstr(3, 1, "Game over !!! ")
             window.addstr(5, 1, intro.game_over_text(game.score,10))
             window.addstr(7,1, "Taking you back to main screen. Please wait.")
             window.refresh()
             d.clear_screen(board.grid_points)
             time.sleep(10)
-            a.update_gsheet_high_score
-            break
+            #a.update_gsheet_high_score(ugame.score)"""
+            return game.score
 
         if encountered_object == "food":
             """increase snake length"""
@@ -260,7 +260,7 @@ def main():
         # get user_name
         if is_user_choice_valid==True:
             user_name=a.get_user_name()
-            Game.player_name=user_name
+            
         # validate user name
         is_username_valid, user_name=a.validate_user_name(user_name)
         # get password
@@ -294,12 +294,20 @@ def main():
     if start_game==True:
         d.stdscr = d.curses.initscr()
         window = d.stdscr
-        wrapper(run_game)
+        score=wrapper(run_game)
         
     # end game
     os.system('clear')
+
+    
     # write high score if necessary
-    print("your high score is zero.")
+    a.update_gsheet_high_score(user_name,score)
+
+    # game over text
+    intro.game_over_text(score,a.get_high_score(user_name))
+    print("Redirecting to main screen.. Please wait..")
+    time.sleep(10)
+    
     #intro.game_over_text(game.score)
     # restart game for same user with an option to sign out and sign in as a new user
 

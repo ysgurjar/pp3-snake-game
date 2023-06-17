@@ -21,18 +21,18 @@ def welcome_text():
 
 
 def game_over_text(score, old_high_score):
-    #print(70*'#')
-    #f = Figlet(font="standard")
-    #print(colored(f.renderText('GAME OVER'), 'green'))
-    #print(70*'#')
-    #print("Game over.")
+    print(70*'#')
+    f = Figlet(font="standard")
+    print(colored(f.renderText('GAME OVER'), 'green'))
+    print(70*'#')
+    
 
     if score > old_high_score:
-        return (f"Your new high score is: {score}.")
+        print(f"\nYour new high score is: {score}.")
     
     if score == old_high_score:
-        return (f"Your high score is unchanged. It is {score}.")
+        print(f"\nYour high score is unchanged. It is {score}.")
     
     if score < old_high_score:
-        return (f"Your current score is {score}. You did not beat your previous high score, which is {old_high_score}")
+        print(f"\nYour current score is {score}. You did not beat your previous high score, which is {old_high_score}.")
      

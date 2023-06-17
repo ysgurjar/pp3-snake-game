@@ -26,14 +26,17 @@ def append_gsheet_db(*args):
     USER_DATA_SPREADSHEET.append_row(args)
     print("data updated successfully")
 
-def update_gsheet_high_score(u_name, high_score):
+def update_gsheet_high_score(u_name, score):
     """
     updates high scrore for given user name
     """
     row_number=usernames_db.index(u_name)+2
+    high_score=max(int(high_scores_db[usernames_db.index(u_name)]),int(score))
     USER_DATA_SPREADSHEET.update_cell(row_number,3,high_score)
-    print("\nHigh score updated.\n")
+    
 
+def get_high_score(u_name):
+    return int(high_scores_db[usernames_db.index(u_name)])
 
 def choose_signing_option():
     print("\n")
@@ -116,9 +119,9 @@ def additional_validation(u_name, pwd, selected_option):
         # prevent - new user singing up with existing user name and new pwd
         case (True, False, "2"):
             print("\nUsername already exists. \n")
-            print("If you are a new user, retry by choosing another username \n")
+            print("If you are a new user, retry by choosing another username. \n")
             print(
-                "If you are an existing user and forgot your pwd, please create a new login \n")
+                "If you are an existing user and forgot your pwd, please create a new login. \n")
             return False
         
         # prevent - sign in with wrong password
@@ -126,12 +129,12 @@ def additional_validation(u_name, pwd, selected_option):
             print("\nUsername already exists. \n")
             print("Wrong password \n")
             print(
-                "If you are an existing user and forgot your pwd, please create a new login \n")
+                "If you are an existing user and forgot your pwd, please create a new login. \n")
             return False
 
         # prevent - sign in if username does not exist
         case _:
             print("\nYou want to sign in but user name does not exist. Please retry. \n")
             print(
-                "If you are an existing user and forgot your pwd, please create a new login \n")
+                "If you are a new user, please select a sign up option. \n")
             return False
