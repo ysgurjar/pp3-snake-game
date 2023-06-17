@@ -78,19 +78,24 @@ def validate_pwd(pwd):
 def additional_validation(u_name, pwd, selected_option):
 
     # check if  user name already exists db
-    
+    usernames_db=USER_DATA_SPREADSHEET.col_values(1)[1:]
     is_user_in_db = u_name in usernames_db
 
     # get the pwd for that username from db and check if it matches
-    pwd_from_db_for_given_user = pwds_db[usernames_db.index(u_name)]
+    try:
+        pwds_db=USER_DATA_SPREADSHEET.col_values(2)[1:]
+        pwd_from_db_for_given_user = pwds_db[usernames_db.index(u_name)]
+    except ValueError:
+        pwd_from_db_for_given_user = None
     is_pwd_match = pwd_from_db_for_given_user == pwd
 
     # check for additional validation
     match (is_user_in_db, is_pwd_match, selected_option):
 
         # allow - new user is signing up with unique user name
-        case (False, None, "2"):
+        case (False, False, "2"):
             print("Sign up successful. \n")
+            append_gsheet_db(u_name,pwd,0)
             return True
 
         # allow - existing user is singing in with matching pwd
@@ -112,7 +117,7 @@ def additional_validation(u_name, pwd, selected_option):
                 "If you are an existing user and forgot your pwd, please create a new login")
             return False
         
-        # prevent sign in with wrong password
+        # prevent - sign in with wrong password
         case (True, False, "1"):
             print("Username already exists.")
             print("Wrong password")
