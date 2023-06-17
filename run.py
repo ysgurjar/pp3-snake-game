@@ -10,6 +10,7 @@ import os
 from curses import wrapper
 import introduction_screen as intro
 import authentication as a
+import display_constructor as d
 
 # Font styles can be found at http://www.figlet.org/examples.html
 
@@ -149,7 +150,7 @@ def initialise(window):
     return board, wall, snake, food
 
 
-import display_constructor as d
+#import display_constructor as d
 
 # Get termnimal window object. To be used as in main logic to draw elements
 
