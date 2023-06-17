@@ -76,3 +76,4 @@ def calculate_display_coordinates():
 def clear_screen(screen_points):
     for point in screen_points:
         stdscr.addstr(*point," ")
+        stdscr.refresh()
