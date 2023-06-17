@@ -11,15 +11,28 @@ CREDS=Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS=CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT=gspread.authorize(SCOPED_CREDS)
 SHEET=GSPREAD_CLIENT.open('pp3_user_data')
-user_data_spreadsheet=SHEET.worksheet('user_data')
-data=user_data_spreadsheet.get_all_values()
-usernames_db=user_data_spreadsheet.col_values(1)[1:]
-pwds_db=user_data_spreadsheet.col_values(2)[1:]
-high_scores_db=user_data_spreadsheet.col_values(3)[1:]
+USER_DATA_SPREADSHEET=SHEET.worksheet('user_data')
+data=USER_DATA_SPREADSHEET.get_all_values()
+usernames_db=USER_DATA_SPREADSHEET.col_values(1)[1:]
+pwds_db=USER_DATA_SPREADSHEET.col_values(2)[1:]
+high_scores_db=USER_DATA_SPREADSHEET.col_values(3)[1:]
 
-print(data)
-print(usernames_db)
-prompt=input("enter username:")
+
+def append_gsheet_db(*args):
+    """
+    appends userdata at the end of database
+    """
+    print("Adding user data to database..")
+    USER_DATA_SPREADSHEET.append_row(args)
+    print("data updated successfully")
+
+def update_gsheet_high_score(u_name, high_score):
+    """
+    updates high scrore for given user name
+    """
+    row_number=usernames_db.index(u_name)+2
+    USER_DATA_SPREADSHEET.update_cell(row_number,3,high_score)
+    print("High score updated.")
 
 
 def choose_signing_option():
