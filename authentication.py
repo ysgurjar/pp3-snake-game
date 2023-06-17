@@ -13,9 +13,14 @@ GSPREAD_CLIENT=gspread.authorize(SCOPED_CREDS)
 SHEET=GSPREAD_CLIENT.open('pp3_user_data')
 user_data_spreadsheet=SHEET.worksheet('user_data')
 data=user_data_spreadsheet.get_all_values()
-usernames=user_data_spreadsheet.col_values(1)[1:]
+usernames_db=user_data_spreadsheet.col_values(1)[1:]
+pwds_db=user_data_spreadsheet.col_values(2)[1:]
+high_scores_db=user_data_spreadsheet.col_values(3)[1:]
+
 print(data)
-print(usernames)
+print(usernames_db)
+prompt=input("enter username:")
+
 
 def choose_signing_option():
     selected_option = input(
@@ -60,11 +65,11 @@ def validate_pwd(pwd):
 def additional_validation(u_name, pwd, selected_option):
 
     # check if  user name already exists db
-    u_name_from_db = ["patricia", "ysgurjar"]
-    is_user_in_db = u_name in u_name_from_db
+    
+    is_user_in_db = u_name in usernames_db
 
     # get the pwd for that username from db and check if it matches
-    pwd_from_db_for_given_user = "yash1234"
+    pwd_from_db_for_given_user = pwds_db[usernames_db.index(u_name)]
     is_pwd_match = pwd_from_db_for_given_user == pwd
 
     # check for additional validation
@@ -89,11 +94,19 @@ def additional_validation(u_name, pwd, selected_option):
         # prevent - new user singing up with existing user name and new pwd
         case (True, False, "2"):
             print("Username already exists.")
-            print("Retry by choosing another username")
+            print("If you are a new user, retry by choosing another username")
             print(
                 "If you are an existing user and forgot your pwd, please create a new login")
             return False
         
+        # prevent sign in with wrong password
+        case (True, False, "1"):
+            print("Username already exists.")
+            print("Wrong password")
+            print(
+                "If you are an existing user and forgot your pwd, please create a new login")
+            return False
+
         # prevent - sign in if username does not exist
         case _:
             print("You want to sign in but user name does not exist. Please retry.")
