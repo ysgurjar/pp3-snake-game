@@ -32,21 +32,23 @@ def update_gsheet_high_score(u_name, high_score):
     """
     row_number=usernames_db.index(u_name)+2
     USER_DATA_SPREADSHEET.update_cell(row_number,3,high_score)
-    print("High score updated.")
+    print("\nHigh score updated.\n")
 
 
 def choose_signing_option():
+    print("\n")
     selected_option = input(
         "For sign-in press 1, for sign up press 2 and press enter:")
     if selected_option in ["1", "2"]:
         # check username
         return True, selected_option
     else:
-        print("Wrong input. Try again.")
+        print("\nWrong input. Try again.\n")
         return choose_signing_option()
 
 
 def get_user_name():
+    print("\n")
     user_name = input(
         "Enter username (alpha numeric, without space, minimum 4 char):")
     return user_name
@@ -57,11 +59,12 @@ def validate_user_name(u_name):
     if u_name.isalnum() == True and len(u_name)>3:
         return True, u_name
     else:
-        print("Invalid input")
+        print("\nInvalid input\n")
         return validate_user_name(get_user_name())
 
 
 def get_pwd():
+    print("\n")
     pwd = input("Enter password (alpha numeric, without space, minimum 8 char):")
     return pwd
 
@@ -71,7 +74,7 @@ def validate_pwd(pwd):
     if pwd.isalnum() == True and len(pwd)>=8:
         return True, pwd
     else:
-        print("Invalid input")
+        print("\nInvalid input\n")
         return validate_pwd(get_pwd())
 
 
@@ -94,40 +97,41 @@ def additional_validation(u_name, pwd, selected_option):
 
         # allow - new user is signing up with unique user name
         case (False, False, "2"):
-            print("Sign up successful. \n")
+            print("\nSign up successful. \n")
             append_gsheet_db(u_name,pwd,0)
             return True
 
         # allow - existing user is singing in with matching pwd
         case (True, True, "1"):
-            print("Sing in successful. \n")
+            print("\nSing in successful. \n")
             return True
 
         # prevent - new user singing up with existing user name and existing pwd
         case (True, True, "2"):
-            print("Username already exist.")
-            print("Please select sign up if you are existing user.")
+            print(" \nUsername already exists. \n")
+            print("Please select sign up if you are existing user. \n")
+            print("Please select a different user name if you are a new user. \n")
             return False
 
         # prevent - new user singing up with existing user name and new pwd
         case (True, False, "2"):
-            print("Username already exists.")
-            print("If you are a new user, retry by choosing another username")
+            print("\nUsername already exists. \n")
+            print("If you are a new user, retry by choosing another username \n")
             print(
-                "If you are an existing user and forgot your pwd, please create a new login")
+                "If you are an existing user and forgot your pwd, please create a new login \n")
             return False
         
         # prevent - sign in with wrong password
         case (True, False, "1"):
-            print("Username already exists.")
-            print("Wrong password")
+            print("\nUsername already exists. \n")
+            print("Wrong password \n")
             print(
-                "If you are an existing user and forgot your pwd, please create a new login")
+                "If you are an existing user and forgot your pwd, please create a new login \n")
             return False
 
         # prevent - sign in if username does not exist
         case _:
-            print("You want to sign in but user name does not exist. Please retry.")
+            print("\nYou want to sign in but user name does not exist. Please retry. \n")
             print(
-                "If you are an existing user and forgot your pwd, please create a new login")
+                "If you are an existing user and forgot your pwd, please create a new login \n")
             return False

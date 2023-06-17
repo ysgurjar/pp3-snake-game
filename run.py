@@ -252,6 +252,7 @@ def main():
         # get user_name
         if is_user_choice_valid==True:
             user_name=a.get_user_name()
+            Game.player_name=user_name
         # validate user name
         is_username_valid, user_name=a.validate_user_name(user_name)
         # get password
@@ -272,6 +273,14 @@ def main():
             # print (" you are logg in now")
             # your game will begin in 5,4,3,2,1...
         # user can press 8 to sign out 
+    print("\nYou are logge in now. \n")
+    print("Your game is about to start.\n")
+    
+    for i in reversed(range(5)):
+        print(i)
+        time.sleep(1)
+
+    
     start_game=True
     # start game
     if start_game==True:
@@ -281,7 +290,7 @@ def main():
     # end game
     os.system('clear')
     # write high score if necessary
-
+    print("your high score is zero.")
     # restart game for same user with an option to sign out and sign in as a new user
 
     # ask user to sign 
