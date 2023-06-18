@@ -52,6 +52,7 @@ def update_gsheet_high_score(u_name, score):
         score (int): score from the last game played
     """
     usernames_db = USER_DATA_SPREADSHEET.col_values(1)[1:]
+    high_scores_db = USER_DATA_SPREADSHEET.col_values(3)[1:]
     row_number = usernames_db.index(u_name) + 2
     high_score = max(
         int(high_scores_db[usernames_db.index(u_name)]), int(score)
@@ -68,6 +69,8 @@ def get_high_score(u_name):
     Returns:
         int: high score for given user
     """
+    high_scores_db = USER_DATA_SPREADSHEET.col_values(3)[1:]
+    usernames_db = USER_DATA_SPREADSHEET.col_values(1)[1:]
     return int(high_scores_db[usernames_db.index(u_name)])
 
 
