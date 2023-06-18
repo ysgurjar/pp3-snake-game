@@ -1,37 +1,32 @@
 # **Snake Game**
 Developed by Yash Gurjar
 
-Am I reponsive Image
+![banner](docs/banner.png)
+[Live website](https://pp3-snakes.herokuapp.com/)
 
 ## Introduction
-It is a classic snake game which needs no introduction. The objective of the snake is to eat the prey and get bigger without crashing into wall or itself. The bigger the snake, the higher the points are with additional difficulty level.
+It is a classic snake game which needs no introduction. The objective of the snake is to eat the prey and get bigger without crashing into wall or itself. As snake grows longer in length, it increases in difficulty level.
 
 The game-app is hosted on Heroku and it is played on Command line emulator.
 
 The user needs to sign up before playing game and he is able to store his high score as well.
 
+<hr>
+
 ## Contents
-* [Project Goals](#project-goals)<br>
-    * [For the user](#for-the-user)
-    * [For the site owner](#for-the-site-owner)
-* [User Experience](#user-experience)<br>
+* [Project Goals](#project-goals)
+    * [For the user](#as-a-first-time-or-recurring-user-i-want)
+    * [For the site owner](#as-a-site-onwer-i-want)
+* [User Experience](#user-experience)
     * [Target audience](#target-audience)
     * [User requirements](#user-requirements)
-    * [User Manual](#user-manual)
-    * [User Stories](#user-stories)
-* [Technical Design](#technical-design)
-    * [Data Models](#data-models)
-    * [Flowchart](#flowchart)
-* [Features](#features)
-    * [App Features](#app-features)
-    * [Feature Ideas for future development](#feature-ideas-for-future-development)
-* [Technologies Used](#technologies-used)
-* [Deployment & Local Development](#deployment--local-development)
-* [Testing](#testing)
-    * [Validation](#validation)
-    * [Manual Testing](#manual-testing)
-    * [Automated Testing](#automated-testing)
-    * [Bugs](#bugs)
+* [Development](#development)
+    * [Game logic](#game-logic)
+    * [Initial UML](#initial-uml)
+    * [Features Implemented](#features-implemented)
+* [Testing and debugging](#testing-and-debugging)
+* [Deployment](#deployment)
+* [Ideas for next sprint](#ideas-for-next-sprint)
 * [Credits](#credits)
 
 ## Project Goals
@@ -62,10 +57,9 @@ Anyone looking for a bit of a fun and challenge is welcome to play.
 
 ### Game logic
 ![Game logic](docs/pp3_game_logic.png)
-The high resolution image can be found [here](assets/pp3_game_logic.png).
+The high resolution image can be found [here](docs/pp3_game_logic.png).
 
-## Initial UML
-
+### Initial UML
 
 As a starting point, the following UML diagram was drawn. 
 ![UML](docs/uml.png)
@@ -125,7 +119,7 @@ The functionality of creating a display was put in a seperate module named 'disp
 
 <details><summary>Terminal left in a "strange state" when exception was raised while playing the game.</summary>
 
-**Problem:** The terminal won't return to normal state.
+**Problem:** The terminal won't return to normal state. Have a look at screenshot below.
 
 ![Strange state of terminal](docs/terminal_strange_state.png)
 
@@ -164,7 +158,7 @@ In my faulty code, the key were mapped to ascii charcters of WASD (wasd) for mov
         115: (1, 0),
         83: (1, 0)
 ```
-This was re-mapped to respond to arrow keys.Arrow keys are regarded as special keys and an input from keyboard can be compared to constants available through curses module.
+This was re-mapped to respond to arrow keys.Arrow keys are regarded as special keys and an input from keyboard can be compared to constants available through `curses` module.
 ```python
 #Correct code
 
@@ -324,7 +318,7 @@ snake.move_snake(direction)
 
 <details><summary>PEP8 Python Linter Errors.</summary>
 
-**Problem** : All the erros were minor and be able to be cleared. 
+**Problem** : Python code included in all four modules was run through [pep8CI liner](https://pep8ci.herokuapp.com/#).All the erros were minor and be able to be cleared. 
 
 Note: One of the errors raised was `do not use base Except` as shown in image below.
 
@@ -343,4 +337,20 @@ except Exception:
 ```
 </details>
 
+### Deployment
 
+The site was deployed on heroku.
+The high resolution image mentioning the steps of deployment can be found [here](docs/heroku_deployment_steps.png)
+
+### Ideas for next sprint
+
+- Add user-feedback option.
+- Add password reset option.
+- Add ability for user to quit anytime.
+- Add option to choose snake speed (slug vs python)
+- Compare user's high score with absolute high screen in database.
+
+## Credits
+
+- Big thank you to my mentor Mo. Shami
+- Dusty Phillips for writing Python 3 Object-Oriented Programming book which was used extensively for OOP fundamentals.
