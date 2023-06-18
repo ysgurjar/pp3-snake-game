@@ -1,40 +1,49 @@
-
-# Inspired from https://towardsdatascience.com/
-# prettify-your-terminal-text-with-termcolor-and-pyfiglet-880de83fda6b
-
-
+# =====================================
+# IMPORTS
+# =====================================
+# 3rd party
 import random
 import time
 import sys
 import os
 from curses import wrapper
+
+# Internal
 import introduction_screen as intro
 import authentication as a
 import display_constructor as d
 
-# Font styles can be found at http://www.figlet.org/examples.html
-
-
-# Build game
+# =====================================
+# CLASS DEFINITION
+# =====================================
 
 
 class Board:
+    """
+    A class used to represent the game area.
+    """
 
     grid_points = {}
 
     def draw_snake(self, window, coordinates):
-        """Draws a snake at given coordinates on the board"""
+        """Draws snake on board at given coordinates
+
+        Args:
+            window (obj): represents current window
+            coordinates (set): a set of tuples containing (y,x) coordinates
+        """
+
         # Delete any residual charater
         for e in coordinates:
-            window.addstr(*e, ' ')
+            window.addstr(*e, " ")
             window.refresh()
-        window.addstr(*coordinates[0], '@')
+        window.addstr(*coordinates[0], "@")
 
         for segment in coordinates[1:]:
-            window.addstr(*segment, '*')
+            window.addstr(*segment, "*")
             window.refresh()
 
-        # d.curses.curs_set(0) - optional. Turned off for heroku CLI
+        # Keep the blinker at tail of snake and not at second from last element
         window.refresh()
         d.curses.setsyx(*coordinates[-1])
         d.curses.doupdate()
@@ -42,32 +51,50 @@ class Board:
         time.sleep(0.2)
 
     def draw_food(self, window, food_coordinates):
-        """Draws a food element at given coordinates on grid"""
-        window.addstr(*food_coordinates, 'X')
+        """Draws food, marked as X on board at given coordinates
 
-        # d.curses.curs_set(0) - optional. Turned off for heroku CLI
+        Args:
+            window (obj): reprsents current window
+            food_coordinates (set): set of tuples containing (y,x) coordinates
+        """
+        window.addstr(*food_coordinates, "X")
         window.refresh()
 
 
 class BoardElement:
+    """Superclass to define board elements i.e. snake, food and wall.
+    All of these elements have coordinates as common proprty.
+    """
+
     def __init__(self, coordinates):
         self.coordinates = coordinates
 
 
 class Snake(BoardElement):
-    """Represents snake on board"""
+    """Represents a snake on board"""
 
     def __init__(self, coordinates):
         BoardElement.__init__(self, coordinates)
 
     def remove(self, window):
-        """Remove previously drawn snake"""
+        """Before redrawing the snake, \
+        it removes the previously drawn snake from board
+
+        Args:
+            window (obj): represents current window
+        """
         for c in self.coordinates:
-            window.addstr(*c, ' ')
-        # d.curses.curs_set(0) - optional. Turned off for heroku CLI
+            window.addstr(*c, " ")
 
     def move_snake(self, direction):
-        """Moves snake around the board"""
+        """Moves snake one step in given direction.
+        This is achieved by redrawing the head one step forward \
+            and removing one element from tail. \
+        Movement is achieved my mathematical sum of \
+        snake's body coordinates with given direction.
+        Args:
+            direction (array): reprsents direction as (y,x)
+        """
         head = self.coordinates[0]
         zip_obj = zip(head, direction)
         coordinate = [sum(x) for x in zip_obj]
@@ -81,9 +108,6 @@ class Food(BoardElement):
 
     def __init__(self, coordinates):
         BoardElement.__init__(self, coordinates)
-
-    def update_food(coordinates):
-        """randomly generate a food, represented as a dot on a board"""
 
 
 class Wall(BoardElement):
@@ -99,23 +123,51 @@ class Game:
         self.score = score
         self.game_status = game_status
 
-    def terminate():
-        """End game"""
+
+# =====================================
+# FUNCTION DEFINITION
+# =====================================
 
 
 def get_food_coordinates(board, wall, snake):
-    """Returns a random point on board that is neither a wall nor a snake"""
+    """Returns a random point on board that is neither a wall nor a snake
+
+    Args:
+        board (obj): object of Board class
+        wall (obj): object of Wall class
+        snake (obj): object of Snake class
+
+    Returns:
+        list: [y,x] point on grid
+    """
     food_coordinates = board.difference(wall, snake)
     food_coordinate = random.choice(list(food_coordinates))
     return food_coordinate
 
 
-def find_encountered_object(snake_head_position,
-                            snake_old_coordinates,
-                            wall_coordinates,
-                            food_coordinates):
-    """Returns the object that snake intercepts as it moves on the grid"""
-    if set(snake_head_position).intersection(set(snake_old_coordinates)) != set():
+def find_encountered_object(
+    snake_head_position,
+    snake_old_coordinates,
+    wall_coordinates,
+    food_coordinates,
+):
+    """Returns the object encountered by snake's head following its movement
+
+    Args:
+        snake_head_position (tuple): \
+            location of snake's head on grid represented by (y,x)
+        snake_old_coordinates (list):\
+             location of previous'y drawing snake's head and body on grid
+        wall_coordinates (set): location of wall on grid
+        food_coordinates (list): location of food on grid
+
+    Returns:
+        str: returns the object encountered by head of snake
+    """
+    if (
+        set(snake_head_position).intersection(set(snake_old_coordinates))
+        != set()
+    ):
         return "snake"
 
     if set(snake_head_position).intersection(set(wall_coordinates)) != set():
@@ -126,69 +178,69 @@ def find_encountered_object(snake_head_position,
 
 
 def initialise(window):
-    """Sets up intial board before starting the game"""
+    """Sets up intial board before starting the game
+
+    Args:
+        window (obj): represents current window
+
+    Returns:
+        obj: board and board-elements i.e. snake, wall and food
+    """
     board = Board()
 
     # Get a list of all display coordinates as a set
     board.grid_points = d.calculate_display_coordinates()
-
     # Construct boundary of the game and get a list of wall coordinates
     wall = Wall(d.wall_constructor())
-
     # Define initial body of snake
     snake = Snake([(3, 5), (3, 4), (3, 3), (3, 2)])
     # Draw snake at given coordinates
     board.draw_snake(window, snake.coordinates)
-
     # Draw food at given coordinates
-    food = Food(get_food_coordinates(board.grid_points,
-                wall.coordinates, set(snake.coordinates)))
+    food = Food(
+        get_food_coordinates(
+            board.grid_points, wall.coordinates, set(snake.coordinates)
+        )
+    )
     board.draw_food(window, food.coordinates)
-
     # Reset player name and high score
-
     return board, wall, snake, food
 
 
-#import display_constructor as d
-
-# Get termnimal window object. To be used as in main logic to draw elements
-
-
-
 def run_game(window):
-    # Start terminal window (as a drawing board)
-    #d.start_screen(window)
+    """Main game logic
 
-    # Don't block I/O calls
+    Args:
+        window (obj): represents current window
+    """
+
+    # Don't block I/O calls - allows snake to move without user input
     window.nodelay(True)
-
     # Start game
-    game = Game("YG", 0, "running")
-
+    game = Game("user", 0, "running")
+    # Initialise
     board, wall, snake, food = initialise(window)
-
     directions = {
-      "KEY_UP": (-1, 0),
-      "KEY_DOWN": (1, 0),
-      "KEY_LEFT": (0, -1),
-      "KEY_RIGHT": (0, 1)
-      }
+        "KEY_UP": (-1, 0),
+        "KEY_DOWN": (1, 0),
+        "KEY_LEFT": (0, -1),
+        "KEY_RIGHT": (0, 1),
+    }
     direction = directions.get("KEY_RIGHT")
-
     while True:
-
-        # save the coordinates of snake
+        # Save the coordinates of snake
         snake_old_coordinates = list(snake.coordinates)
-        # remove previously drawn snake
+        # Remove previously drawn snake
         snake.remove(window)
-        # move snake to new coordinates either based
+        # Move snake to new coordinates either based
         # on default behaviour or uesr key input
         try:
             capture_key = window.getkey()
         except:
             capture_key = None
 
+        # prevent snake from moving 180 degrees.
+        # It can only move 90 degrees
         match (direction, capture_key):
             case ((-1, 0), "KEY_DOWN"):
                 pass
@@ -202,119 +254,85 @@ def run_game(window):
                 direction = directions.get(capture_key, direction)
 
         snake.move_snake(direction)
-
         # Save the new coordinates of snake
         snake_head_position = [list(snake.coordinates)[0]]
-        # redraw snake
+        # Redraw snake
         board.draw_snake(window, snake.coordinates)
-
         # Check whether snake has encountered itsef, food or wall
-
         encountered_object = find_encountered_object(
             snake_head_position,
             snake_old_coordinates,
             wall.coordinates,
-            [(food.coordinates)])
-
+            [(food.coordinates)],
+        )
         if encountered_object == "wall" or encountered_object == "snake":
-            """game over"""
+            # Game over
             d.clear_screen(board.grid_points)
-            #intro.game_over_text(game.score,100)
-            """window.addstr(3, 1, "Game over !!! ")
-            window.addstr(5, 1, intro.game_over_text(game.score,10))
-            window.addstr(7,1, "Taking you back to main screen. Please wait.")
-            window.refresh()
-            d.clear_screen(board.grid_points)
-            time.sleep(10)
-            #a.update_gsheet_high_score(ugame.score)"""
             return game.score
-
         if encountered_object == "food":
-            """increase snake length"""
-
             # increase snake length
             snake_old_coordinates.insert(0, snake_head_position[0])
             snake_new_coordinates = snake_old_coordinates
             snake.coordinates = snake_new_coordinates.copy()
-
             # increase score
             game.score = game.score + 10
             window.addstr(22, 1, " score:" + str(game.score))
-
             # Draw food at given coordinates
-            food = Food(get_food_coordinates(board.grid_points,
-                                             wall.coordinates,
-                                             set(snake.coordinates)))
+            food = Food(
+                get_food_coordinates(
+                    board.grid_points, wall.coordinates, set(snake.coordinates)
+                )
+            )
             board.draw_food(window, food.coordinates)
 
 
 def main():
-    """ Main executable logic """
-    # welcome text
+    # Welcome text
     intro.welcome_text()
     while True:
-        # ask user to choose between sign-in and sign-up.
-        is_user_choice_valid, user_choice= a.choose_signing_option()
-        # user can press 9 to navigate back to home menu
-
-        # get user_name
-        if is_user_choice_valid==True:
-            user_name=a.get_user_name()
-            
-        # validate user name
-        is_username_valid, user_name=a.validate_user_name(user_name)
-        # get password
-        if is_username_valid==True:
-            pwd=a.get_pwd()
-        # validate password
-        is_pwd_valid,pwd=a.validate_pwd(pwd)
-
-        # run additional validation
-        is_add_validation_ok= a.additional_validation(user_name, pwd, user_choice)
-        # write user name and password to google sheet
-        if is_add_validation_ok==True:
+        # Ask user to choose between sign-in and sign-up.
+        is_user_choice_valid, user_choice = a.choose_signing_option()
+        # Get user_name
+        if is_user_choice_valid is True:
+            user_name = a.get_user_name()
+        # Validate user name-loop until valid username is provided
+        is_username_valid, user_name = a.validate_user_name(user_name)
+        # Get password
+        if is_username_valid is True:
+            pwd = a.get_pwd()
+        # Validate password-loop until vaild password is provided
+        is_pwd_valid, pwd = a.validate_pwd(pwd)
+        # Run additional validation
+        is_add_validation_ok = a.additional_validation(
+            user_name, pwd, user_choice
+        )
+        # Break out of loop if everything is validated and start game
+        if is_add_validation_ok is True:
             break
-            #g_sheet_update_status=write_userinfo(user_name,pwd)
-        # confirm user status as signed in
-        #if g_sheet_update_status==True:
-        pass
-            # print (" you are logg in now")
-            # your game will begin in 5,4,3,2,1...
-        # user can press 8 to sign out 
-    print("\nYou are logge in now. \n")
+
+    print("\nYou are logged in now. \n")
     print("Your game is about to start.\n")
-    
     for i in reversed(range(5)):
         print(i)
         time.sleep(1)
+    # Start game
+    d.stdscr = d.curses.initscr()
+    window = d.stdscr
+    score = wrapper(run_game)
 
-    
-    start_game=True
-    # start game
-    if start_game==True:
-        d.stdscr = d.curses.initscr()
-        window = d.stdscr
-        score=wrapper(run_game)
-        
-    # end game
-    os.system('clear')
-
-    
-    # write high score if necessary
-    a.update_gsheet_high_score(user_name,score)
-
-    # game over text
-    intro.game_over_text(score,a.get_high_score(user_name))
+    # End game and clear screen
+    os.system("clear")
+    # Check and update high score if necessary
+    a.update_gsheet_high_score(user_name, score)
+    # Game over text
+    intro.game_over_text(score, a.get_high_score(user_name))
     print("Redirecting to main screen.. Please wait..")
     time.sleep(10)
-    
-    #intro.game_over_text(game.score)
-    # restart game for same user with an option to sign out and sign in as a new user
 
-    # ask user to sign 
 
-    # if user name and password are validated, 
-
+# =====================================
+# RUN PROGRAM
+# =====================================
 if __name__ == "__main__":
     while True:
         main()
