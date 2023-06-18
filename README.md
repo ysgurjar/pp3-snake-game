@@ -1,32 +1,103 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# **Snake Game**
+Developed by Yash Gurjar
 
-Welcome,
+Am I reponsive Image
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **March 14, 2023**
+## Introduction
+It is a classic snake game which needs no introduction. The objective of the snake is to eat its prey and get bigger without crashing into wall or itself. The game has only one level.
 
-## Reminders
+The user needs to sign up before playing game and he is able to store is high score as well.
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+## Contents
+* [Project Goals](#project-goals)<br>
+    * [For the user](#for-the-user)
+    * [For the site owner](#for-the-site-owner)
+* [User Experience](#user-experience)<br>
+    * [Target audience](#target-audience)
+    * [User requirements](#user-requirements)
+    * [User Manual](#user-manual)
+    * [User Stories](#user-stories)
+* [Technical Design](#technical-design)
+    * [Data Models](#data-models)
+    * [Flowchart](#flowchart)
+* [Features](#features)
+    * [App Features](#app-features)
+    * [Feature Ideas for future development](#feature-ideas-for-future-development)
+* [Technologies Used](#technologies-used)
+* [Deployment & Local Development](#deployment--local-development)
+* [Testing](#testing)
+    * [Validation](#validation)
+    * [Manual Testing](#manual-testing)
+    * [Automated Testing](#automated-testing)
+    * [Bugs](#bugs)
+* [Credits](#credits)
 
-## Creating the Heroku app
+## Project Goals
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+### As a first time or recurring user, I must be able..
+* To quickly guess what the game is about
+* To to see rules and instructions
+* To save my best game scores
+* To create a new account
+* To sign in existing account
 
-1. `heroku/python`
-2. `heroku/nodejs`
+### As a site onwer, I want to be able
+* To Provide an easy to ready instructions and rules
+* To make sure all errors are handled and communicated back to user
+* Be able to see if my customer base is growing
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+## User Experience
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+### Target audience
+Anyone looking for a bit of a fun and challenge is welcome to play.
 
-Connect your GitHub repository and deploy as normal.
+### User requirements
+* A game that is understandable and works as expected.
+* Log-in works as expected and incorrect details do not allow the user access to their account.
+* Game score is communicated clearly back to the user.
 
-## Constraints
+## Development
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+### Game logic
+![Game logic](docs/pp3_game_logic.png)
+The high resolution image can be found [here](assets/pp3_game_logic.png).
 
----
+## Features implemented
+Based on the requirements, the following features were implemented.
 
-Happy coding!
+<details><summary>Welcome screen and rules</summary>
+
+![Welcome screen and rules](docs/welcome-screen.png)
+    
+</details>
+
+
+<details><summary>User input and validation screen</summary>
+
+![Input and validation screen](docs/input_validation_screen.png)
+    
+</details>
+
+<details><summary>Game area with live score update</summary>
+
+![Title](docs/full-width-view.png)
+    
+</details>
+
+<details><summary>Live score update</summary>
+
+![Title](docs/full-width-view.png)
+    
+</details>
+
+<details><summary>Game over</summary>
+
+![Title](docs/full-width-view.png)
+    
+</details>
+
+<details><summary>Final score update</summary>
+
+![Title](docs/full-width-view.png)
+    
+</details>
