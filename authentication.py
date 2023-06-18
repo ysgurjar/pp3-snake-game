@@ -206,8 +206,8 @@ def additional_validation(u_name, pwd, selected_option):
                 "If you are a new user, retry by choosing another username. \n"
             )
             print(
-                "If you are an existing user and forgot your pwd,\
-                please create a new login. \n"
+                "If you are an existing user and forgot your pwd,"
+                "please create a new login.\n"
             )
             return False
 
@@ -216,16 +216,16 @@ def additional_validation(u_name, pwd, selected_option):
             print("\nUsername already exists. \n")
             print("Wrong password \n")
             print(
-                "If you are an existing user and forgot your pwd,\
-                please create a new login. \n"
+                "If you are an existing user and forgot your pwd"
+                "please create a new login. \n"
             )
             return False
 
         # Prevent - sign in if username does not exist
         case _:
             print(
-                "\nYou want to sign in but user name does not exist.\
-                Please retry. \n"
+                "\nYou want to sign in but user name does not exist."
+                "Please retry. \n"
             )
             print("If you are a new user, please select a sign up option. \n")
             return False

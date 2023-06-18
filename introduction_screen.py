@@ -24,10 +24,9 @@ def welcome_text():
     f = Figlet(font="contessa")
     print(colored(f.renderText("RULES"), "red"))
     print(
-        """> You are a snake.Eat your prey and get as big as you can.
-> Use arrow keys (up, down, left, right) to navigate.
-> Do not eat yourself. Do not hit the wall.
-"""
+        "> You are a snake.Eat your prey and get as big as you can.\n"
+        "> Use arrow keys (up, down, left, right) to navigate.\n"
+        "> Do not eat yourself. Do not hit the wall."
     )
     print(70 * "#")
 
