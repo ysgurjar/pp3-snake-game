@@ -335,12 +335,12 @@ def main():
     score = wrapper(run_game)
 
     # End game and clear screen
-    os.system("clear")
-    # Check and update high score if necessary
-    a.update_gsheet_high_score(user_name, score)
+    os.system("clear")    
     # Game over text
     intro.game_over_text(score, a.get_high_score(user_name))
     print("Redirecting to main screen.. Please wait..")
+    # Check and update high score if necessary
+    a.update_gsheet_high_score(user_name, score)
     time.sleep(10)
 
 
