@@ -183,13 +183,13 @@ This was re-mapped to respond to arrow keys.Arrow keys are regarded as special k
 
 **Problem:** 
 
-TRY 1:According to the [documentation for the module](https://docs.python.org/3/howto/curses.html) , curs_set(False) makes it invisible. It works in the gitpod terminal but doesn't  on Heroku deployed app.
+TRY 1:According to the [documentation for the module](https://docs.python.org/3/howto/curses.html) , `curs_set(False)` makes it invisible. It works in the gitpod terminal but doesn't  on Heroku deployed app.
 
-TRY 2: Digging a little deeper, I [found](https://www.technovelty.org/linux/a-short-tour-of-term.html) that it depends on the capabilities of terminal being loaded. Th terminal deployed on gitpod is xterm-256color and terminal window on heroku app is xterm-256. Querying both for civis which presents the ascii code for hiding cursor I can confirm that the capabilities are not support in heroku terminal (the grep command returns nothing, means absence of support).
+TRY 2: Digging a little deeper, I [found](https://www.technovelty.org/linux/a-short-tour-of-term.html) that it depends on the capabilities of terminal being loaded. Th terminal deployed on gitpod is `xterm-256color` and terminal window on heroku app is` xterm-256`. Querying both for civis which presents the ascii code for hiding cursor I can confirm that the capabilities are not support in heroku terminal (the grep command returns nothing, means absence of support).
 
 TRY 3: I have tried changing the terminal type in default.js file and rebuilding the project in heroku, but the terminal gives an error.
 
-<details><summary>Screenshots</summary>
+<details><summary>Screenshots of the trial and error encountered</summary>
 
 ![error1](docs/blinking_cursor_error1.png)
 ![heroku emulator](docs/heroku_emulator.png)
@@ -197,32 +197,136 @@ TRY 3: I have tried changing the terminal type in default.js file and rebuilding
 ![error3](docs/blinking_cursor_error3.png)
 </details>
 
-WORKAROUND: Move the blinking cursor manually at the tail end of the snake and remove the faulty code
+WORKAROUND: Move the blinking cursor manually from 2nd last position the tail end of the snake and and disable `curses.set()` so, at the curser will not appear at strange locations on snake.
 
+```python
+#Correct code
+
+window.noutrefresh()
+d.curses.setsyx(*coordinates[-1])
+d.curses.doupdate()
+```
 
 </details>
 
 <details><summary>The user can sign up with a matching username in database - risk of duplicate username in db.</summary>
 
+**Problem:** There are multiple combinatation of user's wish, input validation and password mis match that should not be allowed.
+
+**Solution** Use `match` and `case` statement to cover all bases and give user an indication of what is wrong.
+
+```python
+match (is_user_in_db, is_pwd_match, selected_option):
+        # Allow - new user is signing up with unique user name
+        case (False, False, "2"):
+            print("\nSign up successful. \n")
+            append_gsheet_db(u_name, pwd, 0)
+            return True
+
+        # Allow - existing user is singing in with matching pwd
+        case (True, True, "1"):
+            print("\nSing in successful. \n")
+            return True
+
+        # Prevent - new user singing up with
+        # existing user name and existing pwd
+        case (True, True, "2"):
+            print(" \nUsername already exists. \n")
+            print("Please select sign up if you are existing user. \n")
+            print(
+                "Please select a different user name if you are a new user. \n"
+            )
+            return False
+
+        # Prevent - new user singing up with existing user name and new pwd
+        case (True, False, "2"):
+            print("\nUsername already exists. \n")
+            print(
+                "If you are a new user, retry by choosing another username. \n"
+            )
+            print(
+                "If you are an existing user and forgot your pwd,"
+                "please create a new login.\n"
+            )
+            return False
+
+        # Prevent - sign in with wrong password
+        case (True, False, "1"):
+            print("\nUsername already exists. \n")
+            print("Wrong password \n")
+            print(
+                "If you are an existing user and forgot your pwd"
+                "please create a new login. \n"
+            )
+            return False
+```
+
 </details>
 
 <details><summary>The game will terminate and loop back without any proper feedback to user.</summary>
 
+**Solution**: Add `time.sleep()` and display final high score before redirecting user to main screen
+
+```python
+# Game over text
+intro.game_over_text(score, a.get_high_score(user_name))
+print("Redirecting to main screen.. Please wait..")
+time.sleep(10)
+```
 </details>
 
 <details><summary>The high score from previous game was visible as a starting score for next game - ghost value problem.</summary>
 
+**Solution**: This was due to not clearing the screen at location where high score is displayed. A small code was added to perform so.
+
+```python
+# Erase high score
+d.clear_screen({(22,1),(22,2),(22,3),(22,4),(22,5),(22,6),(22,7),(22,8),(22,9),(22,10)})
+
+```
 </details>
 
 <details><summary>The snake is able to take 180 degree turn, crash with itself and lead to game over.</summary>
 
+**Problem**: For example, when left arrow key is pressed when snake is moving right. Snake will draw on itself and game will be over (because it is considered as snake crashing with itself)
+
+**Solution**: Add a block of code to prevent this behaviour.
+```python
+try:
+    capture_key = window.getkey()
+except:
+    capture_key = None
+
+# prevent snake from moving 180 degrees.
+# It can only move 90 degrees
+match (direction, capture_key):
+    case ((-1, 0), "KEY_DOWN"):
+        pass
+    case ((1, 0), "KEY_UP"):
+        pass
+    case ((0, -1), "KEY_RIGHT"):
+        pass
+    case ((0, 1), "KEY_LEFT"):
+        pass
+    case _:
+        direction = directions.get(capture_key, direction)
+
+snake.move_snake(direction)
+```
 </details>
 
 <details><summary>During deployment, the credential file was not found.</summary>
+
+**Solution:**Add config variable with credentials
+![heorku config vars](docs/heroku_config_vars.png)
 
 </details>
 
 <details><summary>PEP8 Python Linter Errors.</summary>
 
+**Problem** : All the erros were cleared
 </details>
 
+```python
+
+```

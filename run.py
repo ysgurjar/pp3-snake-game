@@ -236,7 +236,7 @@ def run_game(window):
         # on default behaviour or uesr key input
         try:
             capture_key = window.getkey()
-        except:
+        except Exception:
             capture_key = None
 
         # prevent snake from moving 180 degrees.
@@ -268,7 +268,20 @@ def run_game(window):
         if encountered_object == "wall" or encountered_object == "snake":
             # Game over
             d.clear_screen(board.grid_points)
-            d.clear_screen({(22,1),(22,2),(22,3),(22,4),(22,5),(22,6),(22,7),(22,8),(22,9),(22,10)})
+            d.clear_screen(
+                {
+                    (22, 1),
+                    (22, 2),
+                    (22, 3),
+                    (22, 4),
+                    (22, 5),
+                    (22, 6),
+                    (22, 7),
+                    (22, 8),
+                    (22, 9),
+                    (22, 10),
+                }
+            )
             return game.score
         if encountered_object == "food":
             # increase snake length
