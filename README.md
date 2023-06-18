@@ -288,7 +288,7 @@ d.clear_screen({(22,1),(22,2),(22,3),(22,4),(22,5),(22,6),(22,7),(22,8),(22,9),(
 
 <details><summary>The snake is able to take 180 degree turn, crash with itself and lead to game over.</summary>
 
-**Problem**: For example, when left arrow key is pressed when snake is moving right. Snake will draw on itself and game will be over (because it is considered as snake crashing with itself)
+**Problem**: For example, when left arrow key is pressed when snake is moving right, snake will draw on itself and game will be over (because it is considered as snake crashing with itself)
 
 **Solution**: Add a block of code to prevent this behaviour.
 ```python
@@ -324,9 +324,23 @@ snake.move_snake(direction)
 
 <details><summary>PEP8 Python Linter Errors.</summary>
 
-**Problem** : All the erros were cleared
-</details>
+**Problem** : All the erros were minor and be able to be cleared. 
+
+Note: One of the errors raised was `do not use base Except` as shown in image below.
+
+![bare exception](docs/bare_exception_error.png)
+
+This error has been rectified by using general `Exception` class. The reason for it is the fact that exception is raised by `curses` module's `wrapper` function. As the [documentation](https://docs.python.org/3/howto/curses.html) suggests, the curses.wrapper function is called within the try block. If any exception occurs, it will be caught by the except block, which uses the generic Exception type to handle the exception. 
+
+I understand that catching a broad exception like Exception is generally not recommended as it can catch other unrelated exceptions as well. It is better to catch more specific exceptions whenever possible. However, in this case, since the specific exception name is not accessible, using `Exception` is a viable solution.
 
 ```python
-
+# modified code
+try:
+    capture_key = window.getkey()
+except Exception:
+    capture_key = None
 ```
+</details>
+
+
