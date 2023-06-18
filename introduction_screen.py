@@ -2,8 +2,15 @@
 This module provides the text on the terminal at the beginning \
     of game and end of a game
 """
+# =====================================
+# IMPORTS
+# =====================================
 from termcolor import colored
 from pyfiglet import Figlet
+
+# =====================================
+# FUNCTION DEFINITIONS
+# =====================================
 
 
 def welcome_text():
@@ -44,8 +51,5 @@ def game_over_text(score, old_high_score):
         print(f"\nYour high score is unchanged. It is {score}.")
 
     if score < old_high_score:
-        print(
-            f"\nYour current score is {score}. \n \
-                You did not beat your previous high score,\
-                    which is {old_high_score}."
-        )
+        print(f"\nYour current score is {score}.")
+        print(f"You couldn't beat your previous high score {old_high_score}.")
